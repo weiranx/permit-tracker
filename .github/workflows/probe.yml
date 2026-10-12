@@ -5,7 +5,7 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tools/mine3.py || true
+      - run: python3 tools/mine4.py || true
