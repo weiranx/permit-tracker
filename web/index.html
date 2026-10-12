@@ -83,10 +83,51 @@
   .empty { color: var(--muted); }
   .meta { color: var(--muted); font-size: 13px; }
 
-  .banner { display: none; border-radius: 12px; padding: 11px 14px; margin-bottom: 16px; font-size: 14px;
-            background: var(--pine-soft); color: var(--text); border: 1px solid var(--pine-line); box-shadow: var(--shadow); }
-  .banner.show { display: block; }
-  .banner.err { background: var(--glow-soft); border-color: var(--glow); }
+  /* toast: fixed so it's visible wherever you are on the page */
+  .banner { position: fixed; z-index: 50; left: 50%; bottom: 20px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+            width: max-content; max-width: min(560px, calc(100vw - 24px)); border-radius: 14px; padding: 12px 16px; font-size: 14px;
+            background: var(--text); color: var(--bg); box-shadow: 0 16px 40px -12px rgba(0,0,0,.45);
+            transition: opacity .2s ease, transform .2s ease; cursor: pointer; }
+  .banner.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .banner.err { background: var(--glow); color: #fff; }
+
+  /* loading skeletons */
+  .sk { border-radius: 10px; background: linear-gradient(90deg, var(--surface-2) 0%, var(--line) 50%, var(--surface-2) 100%);
+        background-size: 200% 100%; animation: shimmer 1.4s infinite linear; }
+  .sk.slot-sk { height: 72px; border-radius: 14px; }
+  .sk.card-sk { height: 190px; border-radius: var(--radius); margin-bottom: 14px; }
+  .sk.line { height: 14px; margin: 10px 0; }
+  .stat .v .sk { display: inline-block; width: 40px; height: 26px; vertical-align: middle; }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
+
+  /* stats double as jump links */
+  a.stat { color: var(--text); display: block; transition: border-color .12s ease, transform .12s ease; }
+  a.stat:hover { text-decoration: none; border-color: var(--pine-line); transform: translateY(-1px); }
+
+  /* empty / error / call-to-action */
+  .cta { text-align: center; padding: 30px 20px; }
+  .cta h3 { font-family: Fraunces, Georgia, serif; font-size: 21px; margin: 6px 0 4px; }
+  .cta p { margin: 0 auto 16px; color: var(--muted); max-width: 420px; }
+  .cta .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 auto 18px; max-width: 560px; text-align: left; }
+  .cta .how div { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+  .cta .how b { display: block; color: var(--text); font-size: 13.5px; }
+  .cta .ic { color: var(--pine); }
+  .cta.bad .ic { color: var(--glow); }
+
+  /* open-now filters */
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin: -2px 0 12px; }
+  .filters button { border: 1px solid var(--line); background: var(--surface); color: var(--muted); padding: 5px 12px;
+                    border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .filters button[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--surface); }
+  .more { display: block; margin: 10px auto 0; }
+
+  .pending { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--sky);
+             background: color-mix(in srgb, var(--sky) 12%, transparent); padding: 3px 10px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+  .pending::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent;
+                     animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .card.is-pending { border-style: dashed; }
 
   /* ---------- open now ---------- */
   .opennow { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
@@ -130,7 +171,8 @@
   .err { color: var(--glow); font-size: 13px; margin-top: 8px; }
   .trail { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
   .trail-name { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-  .strip { display: flex; gap: 5px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: thin; }
+  .strip { display: flex; gap: 5px; flex-wrap: wrap; padding: 2px 2px 4px; }
+  .strip .ibtn { align-self: center; }
   .day { flex: 0 0 auto; width: 46px; border-radius: 11px; text-align: center; padding: 6px 0 7px;
          font-size: 10.5px; line-height: 1.25; color: var(--muted); background: var(--full-soft); }
   .day .wd { font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
@@ -158,11 +200,14 @@
   dialog { border: 1px solid var(--line); border-radius: 20px; padding: 0; width: min(560px, calc(100vw - 24px));
            background: var(--surface); color: var(--text); box-shadow: 0 30px 80px -20px rgba(0,0,0,.45); }
   dialog::backdrop { background: rgba(15,22,19,.55); backdrop-filter: blur(3px); }
-  dialog form { padding: 22px; display: grid; gap: 14px; }
+  dialog form { padding: 22px; display: grid; gap: 16px; }
+  dialog { max-height: calc(100vh - 32px); overflow-y: auto; }
+  dialog[open] { animation: rise .18s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
   dialog h3 { margin: 0; font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600; }
   label.f { display: grid; gap: 5px; font-size: 13px; font-weight: 600; }
   label.f small, .hint { font-weight: 400; color: var(--muted); font-size: 12.5px; }
-  input[type=text], input[type=password], input[type=number], input[type=date], select {
+  input[type=text], input[type=search], input[type=password], input[type=number], input[type=date], select {
     font: inherit; padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px;
     background: var(--surface-2); color: var(--text); width: 100%; }
   input:focus, select:focus { outline: 2px solid var(--pine); outline-offset: 1px; border-color: transparent; }
@@ -170,6 +215,14 @@
   .picker { max-height: 220px; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 4px 10px; background: var(--surface-2); }
   .picker label { display: flex; gap: 9px; align-items: baseline; padding: 4px 0; font-size: 14px; font-weight: 400; }
   .picker label small { color: var(--muted); }
+  .selchips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .selchips:empty { display: none; }
+  .selchips .chip { display: inline-flex; align-items: center; background: var(--pine-soft); color: var(--pine-ink); font-weight: 600; }
+  .selchips .chip button, .chipset .chip button { border: 0; background: none; color: inherit; padding: 0 0 0 6px; font-size: 14px; line-height: 1; }
+  .fieldset { display: grid; gap: 6px; }
+  .flabel { font-size: 13px; font-weight: 600; }
+  .step { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--pine-soft);
+          color: var(--pine-ink); font-size: 11.5px; font-weight: 700; margin-right: 6px; }
   input[type=checkbox], input[type=radio] { accent-color: var(--pine); }
   .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px; width: max-content; }
   .seg label { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; }
@@ -180,15 +233,15 @@
   .wk label:has(input:checked) { background: var(--pine-soft); border-color: var(--pine-line); color: var(--pine-ink); }
   .wk input { position: absolute; opacity: 0; pointer-events: none; }
   .chipset { display: flex; gap: 6px; flex-wrap: wrap; }
-  .chipset .chip button { border: 0; background: none; color: inherit; padding: 0 0 0 5px; }
-  .form-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+  .form-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; position: sticky; bottom: 0;
+                  background: var(--surface); margin: 0 -22px -22px; padding: 12px 22px 18px; border-top: 1px solid var(--line); }
+  .form-actions .spacer { flex: 1; }
   .form-err { color: var(--glow); font-size: 13px; min-height: 1em; }
   .btn { border: 1px solid var(--line); background: var(--surface-2); color: var(--text); padding: 8px 15px;
          border-radius: 999px; font-size: 13.5px; font-weight: 500; }
   .btn:hover { border-color: var(--muted); }
   .btn.primary { background: var(--pine); color: #fff; border-color: var(--pine); font-weight: 600; }
-  :root:not([data-theme="light"]) .btn.primary { color: #0e1412; }
-  @media (prefers-color-scheme: light) { :root .btn.primary { color: #fff; } }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #0e1412; } }
   .btn.danger { color: var(--glow); }
   .btn[disabled] { opacity: .55; cursor: default; }
   .steps { padding-left: 20px; margin: 8px 0; }
@@ -204,6 +257,12 @@
     .two { grid-template-columns: 1fr; }
     .changes li { grid-template-columns: 10px 1fr auto; }
     .changes .when { grid-column: 2 / -1; margin-top: -6px; }
+    /* dialogs become bottom sheets on phones */
+    dialog { width: 100vw; max-width: 100vw; margin: auto 0 0; border-radius: 22px 22px 0 0; max-height: 92vh; border-bottom: 0; }
+    dialog form { padding: 20px 16px 22px; }
+    .form-actions { margin: 0 -16px -22px; padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); }
+    .cta .how { grid-template-columns: 1fr; }
+    .banner { bottom: calc(14px + env(safe-area-inset-bottom)); }
   }
 </style>
 </head>
@@ -233,25 +292,34 @@
 </header>
 
 <main>
-  <div class="banner" id="banner"></div>
+  <div class="banner" id="banner" role="status" aria-live="polite" title="Dismiss"></div>
 
   <div class="stats">
-    <div class="stat hot"><div class="k">Open now</div><div class="v" id="s-open">–</div></div>
-    <div class="stat"><div class="k">Watches</div><div class="v" id="s-watch">–</div></div>
-    <div class="stat"><div class="k">Changes · 24h</div><div class="v" id="s-chg">–</div></div>
+    <a class="stat hot" href="#sec-open"><div class="k">Open now</div><div class="v" id="s-open"><span class="sk"></span></div></a>
+    <a class="stat" href="#sec-watches"><div class="k">Watches</div><div class="v" id="s-watch"><span class="sk"></span></div></a>
+    <a class="stat" href="#sec-changes"><div class="k">Changes · 24h</div><div class="v" id="s-chg"><span class="sk"></span></div></a>
   </div>
 
-  <div class="section-head"><h2>Open now</h2><span class="meta">Tap to book on recreation.gov</span></div>
-  <div class="opennow" id="opennow"><div class="card empty">Loading…</div></div>
+  <div id="loaderr"></div>
 
-  <div class="section-head">
+  <section id="wrap-open">
+  <div class="section-head" id="sec-open"><h2>Open now</h2><span class="meta">Tap a spot to book it on recreation.gov</span></div>
+  <div class="filters" id="openfilters"></div>
+  <div class="opennow" id="opennow"><div class="sk slot-sk"></div><div class="sk slot-sk"></div><div class="sk slot-sk"></div></div>
+  <div id="openmore"></div>
+  </section>
+
+  <section id="wrap-rest">
+  <div class="section-head" id="sec-watches">
     <h2>Your watches</h2>
     <div class="legend"><span class="l-open"><i></i>enough spots</span><span><i></i>too few / full</span><span class="l-unrel"><i></i>not released</span></div>
   </div>
-  <div id="watches"></div>
+  <div id="watches"><div class="sk card-sk"></div><div class="sk card-sk"></div></div>
 
-  <div class="section-head"><h2>Recent changes</h2><span class="meta">Cancellations and new releases</span></div>
-  <div class="card" id="changes"><span class="empty">Loading…</span></div>
+  <div class="section-head" id="sec-changes"><h2>Recent changes</h2><span class="meta">Cancellations and new releases</span></div>
+  <div class="card" id="changes"><div class="sk line"></div><div class="sk line"></div><div class="sk line" style="width:60%"></div></div>
+
+  </section>
 
   <footer>
     Data from recreation.gov's public availability feed, checked by a GitHub Action.
@@ -285,13 +353,14 @@
   <dialog id="wdlg">
     <form method="dialog" id="wform">
       <h3 id="wtitle">Add watch</h3>
-      <label class="f">Name <input type="text" id="wname" required placeholder="Whitney overnight"></label>
-      <label class="f">Permit <select id="wpermit"></select></label>
-      <div style="display:grid;gap:6px">
-        <span style="font-size:13px;font-weight:600">Trailheads <small class="hint" id="wcount"></small></span>
-        <input type="text" id="wfilter" placeholder="Filter trailheads…">
+      <label class="f"><span><span class="step">1</span>Permit</span> <select id="wpermit"></select></label>
+      <div class="fieldset">
+        <span class="flabel"><span class="step">2</span>Trailheads <small class="hint" id="wcount"></small></span>
+        <div class="selchips" id="wsel"></div>
+        <input type="search" id="wfilter" placeholder="Search trailheads…" aria-label="Search trailheads">
         <div class="picker" id="wdivs"></div>
       </div>
+      <span class="flabel"><span class="step">3</span>When</span>
       <div class="seg">
         <label><input type="radio" name="mode" value="range" checked> Date range</label>
         <label><input type="radio" name="mode" value="dates"> Specific dates</label>
@@ -305,13 +374,17 @@
         <div class="hint">Leave all days unselected to watch every day.</div>
       </div>
       <div id="mdates" style="display:none;gap:8px">
-        <div style="display:flex;gap:8px"><input type="date" id="wdate"><button class="btn" type="button" id="wdateadd">Add</button></div>
+        <label class="f" style="font-weight:400">Pick a date to add it <input type="date" id="wdate"></label>
         <div class="chipset" id="wdates"></div>
       </div>
-      <label class="f">Party size <small>alerts only when at least this many spots are left</small>
-        <input type="number" id="wparty" min="1" max="30" value="2"></label>
-      <div class="form-err" id="werr"></div>
+      <label class="f"><span><span class="step">4</span>Party size</span> <small>You're alerted only when at least this many spots are left.</small>
+        <input type="number" id="wparty" min="1" max="30" value="2" inputmode="numeric"></label>
+      <label class="f">Name <small>Optional. We'll name it for you if you leave this blank.</small>
+        <input type="text" id="wname" placeholder="e.g. Whitney overnight"></label>
+      <div class="form-err" id="werr" role="alert"></div>
       <div class="form-actions">
+        <button class="btn danger" type="button" id="wdel" hidden>Delete watch</button>
+        <span class="spacer"></span>
         <button class="btn" value="cancel" formnovalidate>Cancel</button>
         <button class="btn primary" type="submit" id="wsave">Save</button>
       </div>
@@ -350,6 +423,67 @@ const ago = iso => {
 
 const btn = (label, cls, fn) => { const b = el("button", { class: cls, type: "button" }, label); b.onclick = fn; return b; };
 let DATA = null;
+let openFilter = null;   // watch name, or null for all
+let openAll = false;
+const expanded = new Set();   // "watch|trail" strips showing every day
+const STRIP_MAX = 21, OPEN_MAX = 6;
+
+function slotCard({ w, r }) {
+  const d = new Date(r.date + "T12:00:00");
+  return el("a", { class: "slot", href: r.url, target: "_blank", rel: "noopener",
+                   title: `Book ${r.division} on ${fmtDay(r.date)} at recreation.gov` },
+    el("div", { class: "datebox" },
+      el("div", { class: "m" }, d.toLocaleDateString(undefined, { month: "short" })),
+      el("div", { class: "d" }, String(d.getDate()))),
+    el("div", { class: "what" },
+      el("b", {}, r.division),
+      el("span", {}, `${d.toLocaleDateString(undefined, { weekday: "long" })} · ${w.name}`)),
+    el("div", { class: "left" }, el("strong", {}, String(r.remaining)), "left →"));
+}
+
+function renderOpen(open, nWatches) {
+  const by = {};
+  open.forEach(o => by[o.w.name] = (by[o.w.name] || 0) + 1);
+  if (openFilter && !by[openFilter]) openFilter = null;
+  const f = document.getElementById("openfilters");
+  const names = Object.keys(by);
+  const chip = (label, val) => {
+    const b = btn(label, "", () => { openFilter = val; openAll = false; renderOpen(open, nWatches); });
+    b.setAttribute("aria-pressed", String(openFilter === val));
+    return b;
+  };
+  f.replaceChildren(...(names.length > 1
+    ? [chip(`All ${open.length}`, null), ...names.map(n => chip(`${n} ${by[n]}`, n))] : []));
+
+  const shown = openFilter ? open.filter(o => o.w.name === openFilter) : open;
+  const list = openAll ? shown : shown.slice(0, OPEN_MAX);
+  const on = document.getElementById("opennow");
+  const more = document.getElementById("openmore");
+  more.replaceChildren(shown.length > OPEN_MAX
+    ? btn(openAll ? "Show fewer" : `Show all ${shown.length} open spots`, "btn more",
+          () => { openAll = !openAll; renderOpen(open, nWatches); }) : "");
+  if (list.length) return on.replaceChildren(...list.map(slotCard));
+  on.replaceChildren(el("div", { class: "card calm", style: "grid-column:1/-1" },
+    svg('<path d="M2 20 L9 8 L13 14 L16 9 L22 20 Z"/>', 34),
+    nWatches
+      ? el("div", {}, el("b", {}, "Nothing open right now."),
+          el("div", { class: "meta" }, "You'll get a push the moment a spot opens for your dates and party size."))
+      : el("div", {}, el("b", {}, "No watches yet."),
+          el("div", { class: "meta" }, "Add a watch below and open spots will show up here."))));
+}
+
+function emptyWatches() {
+  const step = (t, d) => el("div", {}, el("b", {}, t), d);
+  return el("div", { class: "card cta" },
+    el("div", { class: "ic" }, svg('<path d="M2 20 L9 8 L13 14 L16 9 L22 20 Z"/>', 40)),
+    el("h3", {}, "Start your first watch"),
+    el("p", {}, "Tell the tracker which trailheads and dates you want. It checks recreation.gov every 10 minutes."),
+    el("div", { class: "how" },
+      step("1. Pick a permit", "and one or more trailheads"),
+      step("2. Choose dates", "a range, or specific days"),
+      step("3. Get a push", "when enough spots open")),
+    btn("+ Add watch", "btn primary", () => openWatch()));
+}
 
 function render(data) {
   DATA = data;
@@ -375,26 +509,13 @@ function render(data) {
   document.getElementById("s-watch").textContent = data.watches.length;
   document.getElementById("s-chg").textContent = changes.filter(c => new Date(c.ts) > dayAgo).length;
 
-  const on = document.getElementById("opennow");
-  on.replaceChildren(...(open.length ? open.map(({ w, r }) => {
-    const d = new Date(r.date + "T12:00:00");
-    return el("a", { class: "slot", href: r.url, target: "_blank", rel: "noopener" },
-      el("div", { class: "datebox" },
-        el("div", { class: "m" }, d.toLocaleDateString(undefined, { month: "short" })),
-        el("div", { class: "d" }, String(d.getDate()))),
-      el("div", { class: "what" },
-        el("b", {}, r.division),
-        el("span", {}, `${d.toLocaleDateString(undefined, { weekday: "long" })} · ${w.name}`)),
-      el("div", { class: "left" }, el("strong", {}, String(r.remaining)), "left →"));
-  }) : [el("div", { class: "card calm", style: "grid-column:1/-1" },
-        svg('<path d="M2 20 L9 8 L13 14 L16 9 L22 20 Z"/>', 34),
-        el("div", {}, el("b", {}, "Nothing open right now."),
-          el("div", { class: "meta" }, "You'll get a push the moment a spot opens for your dates and party size.")))]));
+  renderOpen(open, data.watches.length);
+  document.getElementById("wrap-open").hidden = !data.watches.length;
 
   // Watches
   const ws = document.getElementById("watches");
   if (!data.watches.length) {
-    ws.replaceChildren(el("div", { class: "card empty" }, "No watches yet. Use “+ Add watch” to start one."));
+    ws.replaceChildren(emptyWatches());
   } else ws.replaceChildren(...data.watches.map((w, idx) => {
     const counts = { open: 0, full: 0, unreleased: 0 };
     w.rows.forEach(r => counts[r.state]++);
@@ -402,29 +523,32 @@ function render(data) {
       el("span", {}, svg(ICON.cal), `${fmtDay(w.start)} – ${fmtDay(w.end)}`),
       el("span", {}, svg(ICON.people), `Party of ${w.min_party}`));
     if (w.weekdays.length) facts.append(el("span", {}, svg(ICON.repeat), w.weekdays.map(d => d[0].toUpperCase() + d.slice(1, 3)).join(", ")));
-    const card = el("div", { class: "card" },
+    const card = el("div", { class: "card" + (w.pending ? " is-pending" : "") },
       el("div", { class: "watch-head" },
         el("div", {},
-          el("h3", {}, w.name),
+          el("h3", {}, w.name, ...(w.pending ? [el("span", { class: "pending" }, "Checking…")] : [])),
           el("div", { class: "permit-tag" }, svg(ICON.pin, 13),
             el("a", { href: `https://www.recreation.gov/permits/${w.permit_id}`, target: "_blank", rel: "noopener" },
               w.permit_name || `Permit ${w.permit_id}`))),
         el("div", { class: "row-actions" },
-          btn("Edit", "ibtn", () => openWatch(idx, w.name)),
-          btn("Delete", "ibtn danger", () => deleteWatch(idx, w.name)))),
+          w.pending ? "" : btn("Edit", "ibtn", () => openWatch(idx, w.name)))),
       facts,
-      el("div", { class: "chips" },
+      w.pending ? "" : el("div", { class: "chips" },
         el("span", { class: "chip" + (counts.open ? " open" : "") }, `${counts.open} open`),
         el("span", { class: "chip" }, `${counts.full} full`),
         el("span", { class: "chip" }, `${counts.unreleased} not released`)));
     if (w.error) card.append(el("div", { class: "err" }, `Last check failed: ${w.error}`));
     if (!w.rows.length && !w.error)
-      card.append(el("div", { class: "meta", style: "margin-top:10px" }, "recreation.gov hasn't published these dates yet."));
+      card.append(el("div", { class: "meta", style: "margin-top:10px" }, w.pending
+        ? "Saved. The first check for this watch is running; results appear here in a minute or two."
+        : "recreation.gov hasn't published these dates yet."));
     const byTrail = {};
     w.rows.forEach(r => (byTrail[r.division] ||= []).push(r));
     for (const [trail, rows] of Object.entries(byTrail)) {
       const strip = el("div", { class: "strip" });
-      for (const r of rows) {
+      const key = `${w.name}|${trail}`;
+      const cut = rows.length > STRIP_MAX && !expanded.has(key);
+      for (const r of cut ? rows.slice(0, STRIP_MAX) : rows) {
         const d = new Date(r.date + "T12:00:00");
         const num = r.state === "unreleased" ? "–" : String(r.remaining);
         const title = `${fmtDay(r.date)}: ` + (r.state === "unreleased"
@@ -438,6 +562,8 @@ function render(data) {
                     d.toLocaleDateString(undefined, { month: "numeric", day: "numeric" }));
         strip.append(cell);
       }
+      if (rows.length > STRIP_MAX) strip.append(btn(cut ? `+${rows.length - STRIP_MAX} more days` : "Show fewer", "ibtn",
+        () => { cut ? expanded.add(key) : expanded.delete(key); render(DATA); }));
       card.append(el("div", { class: "trail" }, el("div", { class: "trail-name" }, trail), strip));
     }
     return card;
@@ -461,32 +587,65 @@ async function load() {
   if (!r.ok) throw new Error(`status.json: HTTP ${r.status}`);
   return r.json();
 }
-load().then(render).catch(e => {
-  document.getElementById("updated").textContent = "No data yet: the first check hasn't published.";
-  document.getElementById("opennow").replaceChildren(el("span", { class: "empty" }, String(e)));
-});
+let refreshing = false;   // true while waiting for the check a save triggered
+function showLoadError(e) {
+  document.getElementById("updated").textContent = "Couldn't load the latest check";
+  document.getElementById("statuspill").classList.add("stale");
+  for (const id of ["s-open", "s-watch", "s-chg"]) document.getElementById(id).textContent = "–";
+  document.getElementById("wrap-open").hidden = document.getElementById("wrap-rest").hidden = true;
+  const runs = el("a", { class: "btn", href: document.getElementById("runs").href, target: "_blank", rel: "noopener" }, "Open run history");
+  document.getElementById("loaderr").replaceChildren(el("div", { class: "card cta bad" },
+    el("div", { class: "ic" }, svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/>', 36)),
+    el("h3", {}, "No data yet"),
+    el("p", {}, /404/.test(String(e))
+      ? "The first check hasn't published. It usually lands within 10 minutes of setup."
+      : `The page couldn't load status.json (${e.message || e}). Check your connection and try again.`),
+    el("div", { style: "display:flex;gap:8px;justify-content:center;flex-wrap:wrap" },
+      btn("Try again", "btn primary", start), runs)));
+}
+function start() {
+  document.getElementById("loaderr").replaceChildren();
+  document.getElementById("wrap-rest").hidden = false;
+  return load().then(render).catch(showLoadError);
+}
+start();
 
-const banner = (msg, isErr = false) => {
+// Keep "Checked N min ago" honest and pick up new checks without a reload.
+setInterval(() => {
+  if (!DATA || document.hidden) return;
+  document.getElementById("updated").textContent = `Checked ${ago(DATA.generated_at)}`;
+}, 30000);
+setInterval(async () => {
+  if (!DATA || document.hidden || refreshing) return;
+  try { const d = await load(); if (d.generated_at > DATA.generated_at) render(d); } catch (_) {}
+}, 180000);
+
+let bannerTimer;
+const banner = (msg, isErr = false, sticky = isErr) => {
   const b = document.getElementById("banner");
   b.textContent = msg; b.className = "banner show" + (isErr ? " err" : "");
+  clearTimeout(bannerTimer);
+  if (!sticky) bannerTimer = setTimeout(() => b.className = "banner", 6000);
 };
+document.getElementById("banner").onclick = () => document.getElementById("banner").className = "banner";
 
 // After a save, the push triggers a check; poll until a newer snapshot lands.
 function waitForRefresh(since) {
   let tries = 0;
+  refreshing = true;
   const tick = async () => {
     tries++;
     try {
       const d = await load();
       if (d.generated_at > since) {
+        refreshing = false;
         render(d);
         banner("Updated with the new check.");
-        setTimeout(() => document.getElementById("banner").className = "banner", 6000);
         return;
       }
     } catch (_) {}
     if (tries < 20) setTimeout(tick, 20000);
-    else banner("Saved. The check is taking a while; reload later or open Run history.");
+    else { refreshing = false; banner("Saved. The check is taking a while; reload later or open Run history.", false, true); }
   };
   setTimeout(tick, 30000);
 }
@@ -527,24 +686,27 @@ async function writeConfig(cfg, sha, message) {
 }
 
 // Every edit re-reads config.json first so we never overwrite a newer copy.
-async function mutate(message, fn) {
-  if (!getToken()) { openToken(); return false; }
+// `local` applies the same change to the on-screen data so it shows right away.
+async function mutate(message, fn, local, done) {
   const { cfg, sha } = await readConfig();
   fn(cfg);
   await writeConfig(cfg, sha, message);
   const since = DATA ? DATA.generated_at : "";
-  banner("Saved to config.json. A fresh check is running; this page refreshes when it finishes (usually 1 to 2 min).");
+  if (DATA && local) { local(DATA.watches); render(DATA); }
+  banner(done || "Saved. A fresh check is running; this page updates when it finishes.");
   waitForRefresh(since);
   return true;
 }
 
 const tokdlg = document.getElementById("tokdlg");
-function openToken() {
+let afterToken = null;   // what to do once connected (e.g. open the add form)
+function openToken(next = null) {
+  afterToken = typeof next === "function" ? next : null;
   document.getElementById("tokinput").value = "";
   document.getElementById("tokerr").textContent = "";
   tokdlg.showModal();
 }
-document.getElementById("tokbtn").onclick = openToken;
+document.getElementById("tokbtn").onclick = () => openToken();
 document.getElementById("tokforget").onclick = () => { setToken(""); refreshTokBtn(); tokdlg.close(); banner("Token removed from this browser."); };
 document.getElementById("tokform").onsubmit = async e => {
   if (e.submitter && e.submitter.value === "cancel") return;
@@ -556,7 +718,8 @@ document.getElementById("tokform").onsubmit = async e => {
   try {
     await gh("GET", null, t);
     setToken(t); refreshTokBtn(); tokdlg.close();
-    banner("GitHub connected. You can add, edit and delete watches now.");
+    const next = afterToken; afterToken = null;
+    if (next) next(); else banner("GitHub connected. You can add, edit and delete watches now.");
   } catch (x) { err.textContent = x.message; }
 };
 
@@ -594,7 +757,25 @@ function fillDivisions(checked = new Set()) {
 }
 let checkedDivs = new Set();
 $("wdivs").onchange = e => { if (e.target.checked) checkedDivs.add(e.target.value); else checkedDivs.delete(e.target.value); updateCount(); };
-const updateCount = () => $("wcount").textContent = checkedDivs.size ? `${checkedDivs.size} selected` : "";
+function divName(id) {
+  const p = catalog()[$("wpermit").value];
+  const d = p && p.divisions.find(d => d.id === id);
+  return d ? d.name : id;
+}
+// Selected trailheads stay visible as chips even when the search hides them.
+function updateCount() {
+  $("wcount").textContent = checkedDivs.size ? `${checkedDivs.size} selected` : "pick one or more";
+  $("wsel").replaceChildren(...[...checkedDivs].map(id => {
+    const x = el("button", { type: "button", title: "Remove", "aria-label": `Remove ${divName(id)}` }, "×");
+    x.onclick = () => {
+      checkedDivs.delete(id);
+      const box = $("wdivs").querySelector(`input[value="${id}"]`);
+      if (box) box.checked = false;
+      updateCount();
+    };
+    return el("span", { class: "chip" }, divName(id), x);
+  }));
+}
 $("wfilter").oninput = () => fillDivisions(checkedDivs);
 $("wpermit").onchange = () => { checkedDivs = new Set(); $("wfilter").value = ""; fillDivisions(checkedDivs); };
 
@@ -612,15 +793,24 @@ function drawDates() {
     return el("span", { class: "chip open" }, fmtDay(d), x);
   }));
 }
-$("wdateadd").onclick = () => {
+$("wdate").onchange = () => {
   const v = $("wdate").value;
   if (v && !pickedDates.includes(v)) { pickedDates.push(v); drawDates(); }
+  $("wdate").value = "";
 };
+// Close dialogs by clicking the dimmed backdrop.
+for (const d of document.querySelectorAll("dialog"))
+  d.addEventListener("click", e => { if (e.target === d) d.close(); });
 
 async function openWatch(idx = null, name = null) {
-  if (!getToken()) { openToken(); return; }
+  if (!getToken()) { openToken(() => openWatch(idx, name)); return; }
   editing = idx === null ? null : { idx, name };
   $("werr").textContent = "";
+  const today = new Date().toLocaleDateString("en-CA");
+  for (const id of ["wstart", "wend", "wdate"]) $(id).min = today;
+  $("wdel").hidden = !editing;
+  $("wdel").textContent = "Delete watch";
+  delete $("wdel").dataset.armed;
   $("wfilter").value = "";
   let w = { name: "", permit_id: Object.keys(catalog())[0], divisions: [], min_party: 2 };
   if (editing) {
@@ -631,7 +821,7 @@ async function openWatch(idx = null, name = null) {
       w = cur;
     } catch (x) { banner(x.message, true); return; }
   }
-  $("wtitle").textContent = editing ? "Edit watch" : "Add watch";
+  $("wtitle").textContent = editing ? `Edit “${w.name}”` : "Add watch";
   $("wname").value = w.name || "";
   fillPermits(String(w.permit_id));
   const p = catalog()[$("wpermit").value];
@@ -651,6 +841,21 @@ async function openWatch(idx = null, name = null) {
   wdlg.showModal();
 }
 $("add").onclick = () => openWatch();
+$("wstart").onchange = () => { if (!$("wend").value || $("wend").value < $("wstart").value) $("wend").value = $("wstart").value; };
+$("wdel").onclick = () => {
+  const b = $("wdel");
+  if (!b.dataset.armed) { b.dataset.armed = "1"; b.textContent = "Tap again to delete"; return; }
+  wdlg.close();
+  deleteWatch(editing.idx, editing.name);
+};
+
+const MONTH = d => new Date(d + "T12:00:00").toLocaleDateString(undefined, { month: "short", year: "numeric" });
+function autoName(w) {
+  const first = divName(w.divisions[0]);
+  const more = w.divisions.length > 1 ? ` +${w.divisions.length - 1}` : "";
+  const d = w.dates ? w.dates[0] : w.start;
+  return `${first}${more} · ${MONTH(d)}`;
+}
 
 $("wform").onsubmit = async e => {
   if (e.submitter && e.submitter.value === "cancel") return;
@@ -668,15 +873,22 @@ $("wform").onsubmit = async e => {
     const wk = [...$("wwk").querySelectorAll("input:checked")].map(i => i.value);
     if (wk.length) w.weekdays = wk;
   } else w.dates = [...pickedDates];
-  if (!w.name) return err.textContent = "Give the watch a name.";
-  if (!w.permit_id) return err.textContent = "Pick a permit.";
-  if (!w.divisions.length) return err.textContent = "Pick at least one trailhead.";
-  if (mode === "range" && (!w.start || !w.end)) return err.textContent = "Pick a first and last date.";
-  if (mode === "range" && w.end < w.start) return err.textContent = "The last date is before the first.";
-  if (mode === "dates" && !w.dates.length) return err.textContent = "Add at least one date.";
-  err.textContent = "Saving…"; $("wsave").disabled = true;
+  const fail = (msg, id) => { err.textContent = msg; if (id) $(id).focus(); err.scrollIntoView({ block: "nearest" }); };
+  if (!w.permit_id) return fail("Pick a permit.", "wpermit");
+  if (!w.divisions.length) return fail("Pick at least one trailhead.", "wfilter");
+  if (mode === "range" && (!w.start || !w.end)) return fail("Pick a first and last date.", w.start ? "wend" : "wstart");
+  if (mode === "range" && w.end < w.start) return fail("The last date is before the first.", "wend");
+  if (mode === "dates" && !w.dates.length) return fail("Add at least one date.", "wdate");
+  if (!w.name) w.name = autoName(w);
+  err.textContent = ""; $("wsave").disabled = true; $("wsave").textContent = "Saving…";
+  const shown = {   // what the card shows until the check finishes
+    name: w.name, permit_id: w.permit_id, min_party: w.min_party,
+    start: w.dates ? w.dates[0] : w.start, end: w.dates ? w.dates.at(-1) : w.end,
+    weekdays: w.weekdays || [], permit_name: (catalog()[w.permit_id] || {}).name,
+    rows: [], error: null, pending: true };
+  const ed = editing;
   try {
-    await mutate(editing ? `Edit watch: ${w.name}` : `Add watch: ${w.name}`, cfg => {
+    await mutate(ed ? `Edit watch: ${w.name}` : `Add watch: ${w.name}`, cfg => {
       if (editing) {
         const cur = cfg.watches[editing.idx];
         if (!cur || cur.name !== editing.name) throw new Error("config.json changed since you opened this. Reload and try again.");
@@ -684,21 +896,22 @@ $("wform").onsubmit = async e => {
         for (const k of ["name", "permit_id", "divisions", "division_names", "start", "end", "dates", "weekdays", "min_party"]) delete keep[k];
         cfg.watches[editing.idx] = { ...w, ...keep };
       } else cfg.watches.push(w);
-    });
+    }, ws => { if (ed) ws[ed.idx] = shown; else ws.push(shown); },
+    ed ? `Saved “${w.name}”. Re-checking it now.` : `Added “${w.name}”. Checking it now.`);
     wdlg.close();
-  } catch (x) { err.textContent = x.message; }
-  finally { $("wsave").disabled = false; }
+    if (!ed) document.getElementById("sec-watches").scrollIntoView({ behavior: "smooth" });
+  } catch (x) { fail(x.message); }
+  finally { $("wsave").disabled = false; $("wsave").textContent = "Save"; }
 };
 
 async function deleteWatch(idx, name) {
-  if (!getToken()) { openToken(); return; }
-  if (!confirm(`Delete the watch "${name}"?`)) return;
+  if (!getToken()) { openToken(() => deleteWatch(idx, name)); return; }
   try {
     await mutate(`Delete watch: ${name}`, cfg => {
       const cur = cfg.watches[idx];
       if (!cur || cur.name !== name) throw new Error("config.json changed since this page loaded. Reload and try again.");
       cfg.watches.splice(idx, 1);
-    });
+    }, ws => ws.splice(idx, 1), `Deleted “${name}”.`);
   } catch (x) { banner(x.message, true); }
 }
 </script>
