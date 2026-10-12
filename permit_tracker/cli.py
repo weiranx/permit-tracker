@@ -6,7 +6,7 @@ import json
 import random
 import sys
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from . import notify
 from .api import NotFound, RateLimited, RecGovClient, month_chunks
@@ -89,7 +89,10 @@ def _range(w: dict) -> tuple[date, date]:
     return start, date.fromisoformat(w["end"])
 
 
-def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> int:
+def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False,
+             report: list | None = None) -> int:
+    """One pass over every watch. If `report` is given, a JSON-ready summary of
+    each watch is appended to it (used for the dashboard)."""
     alerts = 0
     for w in cfg["watches"]:
         pid = str(w["permit_id"])
@@ -97,17 +100,26 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> 
         want_divs = {str(d) for d in w.get("divisions") or []}
         ok_day = _dates_filter(w)
         start, end = _range(w)
+        entry = {"name": w.get("name", pid), "permit_id": pid, "min_party": min_party,
+                 "start": start.isoformat(), "end": end.isoformat(),
+                 "weekdays": w.get("weekdays") or [], "rows": [], "error": None}
+        if report is not None:
+            report.append(entry)
         if end < start:
+            entry["error"] = "date range is in the past"
             continue
         try:
             slots = tracker.fetch(pid, start, end, w.get("api", "auto"))
         except RateLimited as e:
             print(f"[rate-limited] {e}", file=sys.stderr)
+            entry["error"] = "rate limited by recreation.gov"
             return alerts
         except Exception as e:
             print(f"[error] {w.get('name', pid)}: {e}", file=sys.stderr)
+            entry["error"] = str(e)[:200]
             continue
         pname, divs = tracker.names(pid)
+        entry["permit_name"] = pname
         lottery = has_lottery(tracker.content(pid))
         name_bits = [n.lower() for n in w.get("division_names") or []]
         counts = {"open": 0, "full": 0, "not released": 0}
@@ -119,12 +131,18 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> 
                 continue
             if not ok_day(s.date) or s.walkup or s.non_quota:
                 continue
+            row = {"date": s.date, "division_id": s.division_id, "division": div_name,
+                   "remaining": s.remaining, "total": s.total, "url": booking_url(pid, s.date)}
             if s.not_yet_released or (lottery and s.total and s.remaining == s.total):
                 # Lottery permits (Whitney) show untouched full quotas for dates
                 # the lottery hasn't released yet. Real openings are partial.
                 counts["not released"] += 1
+                entry["rows"].append({**row, "state": "unreleased",
+                                      "release_date": (s.release_date or "")[:10] or None})
                 continue
-            counts["open" if s.remaining >= min_party else "full"] += 1
+            state_name = "open" if s.remaining >= min_party else "full"
+            counts[state_name] += 1
+            entry["rows"].append({**row, "state": state_name})
             old = state.update(pid, s.division_id, s.date, s.remaining)
             if not quiet:
                 total = f"/{s.total}" if s.total is not None else ""
@@ -160,8 +178,21 @@ def cmd_watch(args, cfg):
 
 def cmd_check(args, cfg):
     client = RecGovClient(min_interval=float(cfg.get("min_request_interval_s", 2)))
-    n = run_once(cfg, Tracker(client), State(cfg.get("state_db", "permit_state.sqlite3")))
+    state = State(cfg.get("state_db", "permit_state.sqlite3"))
+    report: list = []
+    n = run_once(cfg, Tracker(client), state, report=report)
     print(f"\n{n} new opening(s).")
+    if args.json:
+        snapshot = {
+            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "poll_minutes": cfg.get("poll_minutes", 10),
+            "new_openings": n,
+            "watches": report,
+            "recent_changes": state.recent(40),
+        }
+        with open(args.json, "w") as f:
+            json.dump(snapshot, f, indent=1)
+        print(f"wrote {args.json}")
 
 
 def cmd_divisions(args, _cfg):
@@ -196,7 +227,8 @@ def main(argv=None):
     sub = p.add_subparsers(dest="cmd", required=True)
     w = sub.add_parser("watch", help="poll forever and alert on new openings")
     w.add_argument("-v", "--verbose", action="store_true")
-    sub.add_parser("check", help="one pass over the config, print counts")
+    c = sub.add_parser("check", help="one pass over the config, print counts")
+    c.add_argument("--json", metavar="PATH", help="also write a dashboard snapshot here")
     d = sub.add_parser("divisions", help="list a permit's trailheads / entry points")
     d.add_argument("permit_id")
     d.add_argument("--grep")

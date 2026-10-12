@@ -30,3 +30,13 @@ class State:
                             (now, permit_id, division_id, day, old, remaining))
         self.db.commit()
         return old
+
+    def recent(self, limit: int = 40) -> list[dict]:
+        """Latest count changes, newest first (first sightings excluded)."""
+        rows = self.db.execute(
+            "SELECT ts, permit_id, division_id, date, old_remaining, new_remaining "
+            "FROM history WHERE old_remaining IS NOT NULL ORDER BY ts DESC LIMIT ?",
+            (limit,)).fetchall()
+        return [{"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(r[0])),
+                 "permit_id": r[1], "division_id": r[2], "date": r[3],
+                 "old": r[4], "new": r[5]} for r in rows]

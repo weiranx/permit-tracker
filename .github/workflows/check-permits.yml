@@ -9,7 +9,11 @@ on:
     paths:
       - config.json
       - "permit_tracker/**"
+      - "web/**"
       - .github/workflows/check-permits.yml
+
+permissions:
+  contents: write   # to publish the dashboard to the gh-pages branch
 
 concurrency:
   group: check-permits
@@ -36,7 +40,25 @@ jobs:
       - name: Check availability
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-        run: python3 -m permit_tracker -c config.json check
+        run: python3 -m permit_tracker -c config.json check --json status.json
+
+      # GitHub Pages serves the gh-pages branch. Force-push a single commit each
+      # run so the branch doesn't grow a commit every 10 minutes.
+      - name: Publish dashboard
+        if: hashFiles('status.json') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p _site
+          cp web/index.html status.json _site/
+          touch _site/.nojekyll
+          cd _site
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -qm "Dashboard snapshot ${{ github.run_id }}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
 
       - uses: actions/cache/save@v4
         if: always()

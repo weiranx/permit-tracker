@@ -50,6 +50,15 @@ on every poll. Every change is logged in `permit_state.sqlite3` (`history` table
 
 Yosemite (445859) and SEKI (445857) wilderness use a different API and aren't supported yet.
 
+## Dashboard
+
+**https://weiranx.github.io/permit-tracker/** shows what's open now, a day-by-day strip
+for each trailhead you watch, and recent changes (cancellations). Every Action run
+refreshes it. The page is static (`web/index.html`) and reads `status.json`, which
+`check --json status.json` writes; the Action publishes both to the `gh-pages` branch.
+To change what's watched, use the page's **Edit watches** button (it opens
+`config.json` on GitHub); saving it triggers a fresh check.
+
 ## Run it on GitHub Actions (no computer needed)
 
 `.github/workflows/check-permits.yml` runs `check` every ~10 min on GitHub's servers.

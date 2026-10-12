@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Permit Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛰️</text></svg>">
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #ffffff; --text: #1d1f1c; --muted: #6b6f68; --line: #e3e1da;
+    --open: #2f7d4f; --open-bg: #dcefe2; --full: #b9b6ad; --full-bg: #eeece6;
+    --unrel-bg: repeating-linear-gradient(135deg, #f3f1ea 0 4px, #e6e3da 4px 8px);
+    --accent: #2f5d8a; --warn: #a3542a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141614; --card: #1d201d; --text: #e9ebe6; --muted: #9aa096; --line: #2e322e;
+      --open: #6fd093; --open-bg: #1f3b29; --full: #4d524c; --full-bg: #262a26;
+      --unrel-bg: repeating-linear-gradient(135deg, #222622 0 4px, #2b302b 4px 8px);
+      --accent: #8db8e3; --warn: #e39a6f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin-bottom: 20px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 28px 0 10px; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .stale { color: var(--warn); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 6px 12px;
+         border-radius: 8px; font-size: 13px; }
+  .btn:hover { text-decoration: none; border-color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .opennow { display: grid; gap: 8px; }
+  .opennow a { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px;
+               background: var(--open-bg); color: var(--text); }
+  .opennow b { color: var(--open); white-space: nowrap; }
+  .empty { color: var(--muted); }
+  .watch-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-bottom: 4px; }
+  .watch-head h3 { margin: 0; font-size: 17px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 12px; }
+  .chip { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--full-bg); color: var(--muted); }
+  .chip.open { background: var(--open-bg); color: var(--open); font-weight: 600; }
+  .err { color: var(--warn); font-size: 13px; }
+  .trail { margin-top: 10px; }
+  .trail-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .strip { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 6px; }
+  .day { flex: 0 0 auto; width: 38px; border-radius: 6px; text-align: center; padding: 3px 0 4px;
+         font-size: 11px; line-height: 1.2; color: var(--muted); background: var(--full-bg); }
+  .day .n { display: block; font-size: 13px; font-weight: 600; color: var(--full); }
+  .day.open { background: var(--open-bg); color: var(--open); }
+  .day.open .n { color: var(--open); }
+  .day.unreleased { background: var(--unrel-bg); }
+  .day.unreleased .n { color: var(--muted); font-weight: 400; }
+  a.day:hover { text-decoration: none; outline: 2px solid var(--open); }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px;
+                          vertical-align: -2px; margin-right: 5px; background: var(--full-bg); }
+  .legend .l-open::before { background: var(--open-bg); outline: 1px solid var(--open); }
+  .legend .l-unrel::before { background: var(--unrel-bg); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td { padding: 6px 4px; border-top: 1px solid var(--line); }
+  td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .up { color: var(--open); font-weight: 600; }
+  footer { margin-top: 32px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>⛰️ Permit Tracker</h1>
+    <span class="meta" id="updated">Loading…</span>
+    <div class="actions">
+      <a class="btn" id="edit" href="#">Edit watches</a>
+      <a class="btn" id="runs" href="#">Run history</a>
+    </div>
+  </header>
+
+  <h2>Open now</h2>
+  <div class="card"><div class="opennow" id="opennow"><span class="empty">Loading…</span></div></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+    <h2>Your watches</h2>
+    <div class="legend"><span class="l-open">enough spots</span><span>too few / full</span><span class="l-unrel">not released yet</span></div>
+  </div>
+  <div id="watches"></div>
+
+  <h2>Recent changes</h2>
+  <div class="card" id="changes"><span class="empty">Loading…</span></div>
+
+  <footer>
+    Data comes from recreation.gov's public availability feed, checked by a GitHub Action.
+    Book on recreation.gov; this page only watches.
+  </footer>
+</main>
+<script>
+const REPO = "weiranx/permit-tracker";
+document.getElementById("edit").href = `https://github.com/${REPO}/edit/main/config.json`;
+document.getElementById("runs").href = `https://github.com/${REPO}/actions/workflows/check-permits.yml`;
+
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) k === "class" ? n.className = v : n.setAttribute(k, v);
+  for (const k of kids) n.append(k);
+  return n;
+};
+const fmtDay = d => new Date(d + "T12:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+const ago = iso => {
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
+};
+
+function render(data) {
+  const up = document.getElementById("updated");
+  up.textContent = `Checked ${ago(data.generated_at)}`;
+  up.title = data.generated_at;
+  if (Date.now() - new Date(data.generated_at) > 3 * 3600e3) {
+    up.classList.add("stale");
+    up.textContent += " (the Action may be paused)";
+  }
+
+  // Open now
+  const open = [];
+  const names = {};
+  for (const w of data.watches) for (const r of w.rows) {
+    names[`${w.permit_id}:${r.division_id}`] = r.division;
+    if (r.state === "open") open.push({ w, r });
+  }
+  open.sort((a, b) => a.r.date.localeCompare(b.r.date));
+  const on = document.getElementById("opennow");
+  on.replaceChildren(...(open.length ? open.map(({ w, r }) =>
+    el("a", { href: r.url, target: "_blank", rel: "noopener" },
+      el("span", {}, `${fmtDay(r.date)} · ${r.division}`),
+      el("b", {}, `${r.remaining} left →`))) :
+    [el("span", { class: "empty" }, "Nothing open for your dates and party size right now.")]));
+
+  // Watches
+  const ws = document.getElementById("watches");
+  ws.replaceChildren(...data.watches.map(w => {
+    const counts = { open: 0, full: 0, unreleased: 0 };
+    w.rows.forEach(r => counts[r.state]++);
+    const card = el("div", { class: "card" },
+      el("div", { class: "watch-head" },
+        el("h3", {}, w.name),
+        el("a", { href: `https://www.recreation.gov/permits/${w.permit_id}`, target: "_blank", rel: "noopener", class: "meta" },
+          w.permit_name || `Permit ${w.permit_id}`)),
+      el("div", { class: "meta" },
+        `${fmtDay(w.start)} – ${fmtDay(w.end)}` +
+        (w.weekdays.length ? ` · ${w.weekdays.join(", ")}` : "") + ` · party of ${w.min_party}`),
+      el("div", { class: "chips" },
+        el("span", { class: "chip" + (counts.open ? " open" : "") }, `${counts.open} open`),
+        el("span", { class: "chip" }, `${counts.full} full`),
+        el("span", { class: "chip" }, `${counts.unreleased} not released`)));
+    if (w.error) card.append(el("div", { class: "err" }, `Last check failed: ${w.error}`));
+    if (!w.rows.length && !w.error)
+      card.append(el("div", { class: "empty" }, "recreation.gov hasn't published these dates yet."));
+    const byTrail = {};
+    w.rows.forEach(r => (byTrail[r.division] ||= []).push(r));
+    for (const [trail, rows] of Object.entries(byTrail)) {
+      const strip = el("div", { class: "strip" });
+      for (const r of rows) {
+        const d = new Date(r.date + "T12:00:00");
+        const label = `${d.toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}`;
+        const num = r.state === "unreleased" ? "–" : String(r.remaining);
+        const title = `${fmtDay(r.date)}: ` + (r.state === "unreleased"
+          ? "not released yet" + (r.release_date ? ` (opens ${r.release_date})` : "")
+          : `${r.remaining}${r.total != null ? " of " + r.total : ""} left`);
+        const cell = r.state === "open"
+          ? el("a", { class: "day open", href: r.url, target: "_blank", rel: "noopener", title })
+          : el("div", { class: `day ${r.state}`, title });
+        cell.append(d.toLocaleDateString(undefined, { weekday: "narrow" }), el("span", { class: "n" }, num), label);
+        strip.append(cell);
+      }
+      card.append(el("div", { class: "trail" }, el("div", { class: "trail-name" }, trail), strip));
+    }
+    return card;
+  }));
+
+  // Recent changes
+  const ch = document.getElementById("changes");
+  const rows = (data.recent_changes || []).map(c =>
+    el("tr", {},
+      el("td", {}, `${fmtDay(c.date)} · ${names[`${c.permit_id}:${c.division_id}`] || c.division_id}`),
+      el("td", { class: "num" + (c.new > c.old ? " up" : "") }, `${c.old} → ${c.new}`),
+      el("td", { class: "num meta" }, ago(c.ts))));
+  ch.replaceChildren(rows.length ? el("table", {}, ...rows)
+    : el("span", { class: "empty" }, "No changes seen yet. Cancellations show up here."));
+}
+
+fetch(`status.json?t=${Date.now()}`)
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(render)
+  .catch(e => {
+    document.getElementById("updated").textContent = "No data yet: the first check hasn't published.";
+    document.getElementById("opennow").replaceChildren(el("span", { class: "empty" }, String(e)));
+  });
+</script>
+</body>
+</html>

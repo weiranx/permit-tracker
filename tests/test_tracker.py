@@ -109,6 +109,16 @@ class TrackerTests(unittest.TestCase):
         self.assertEqual(send.call_count, 1)
         self.assertIn("Day Use", send.call_args[0][1])
 
+    def test_report_rows_for_dashboard(self):
+        report = []
+        tracker = cli.Tracker(FakeClient([inyo({"2027-07-17": {"166": 5}})]))
+        with mock.patch.object(cli.notify, "send_all"), redirect_stdout(io.StringIO()):
+            cli.run_once(self.cfg, tracker, self.state, report=report)
+        [w] = report
+        self.assertEqual(w["permit_name"], "Mt. Whitney")
+        self.assertEqual(w["rows"][0]["state"], "open")
+        self.assertEqual(w["rows"][0]["division"], "Mt. Whitney Trail (Overnight)")
+
     def test_skips_unreleased_and_non_quota(self):
         self.cfg["watches"][0]["divisions"] = ["166", "520"]
         self.assertFalse(self.run_with(UNRELEASED).called)
