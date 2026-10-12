@@ -14,7 +14,12 @@ def summarize(u, body):
         lines = [f"name={p.get('name')!r} divisions={len(divs)} keys={sorted(p)[:40]}"]
         for k, v in list(divs.items())[:80]:
             lines.append(f"  {k}: {v.get('name')!r} code={v.get('code')!r} district={v.get('district')!r} type={v.get('type')!r}")
-        return "\n".join(lines)
+        for k in ("has_lottery", "launch_window_open", "launch_window_close", "launch_window_step",
+                  "important_dates", "lotteries", "rules", "quota_type", "release_schedule"):
+            if k in p:
+                lines.append(f"  [{k}] {json.dumps(p[k])[:1200]}")
+        lines.append(f"  all keys: {sorted(p)}")
+        return "\n".join(lines[:6] + lines[-12:])
     if "/permitinyo/" in u and isinstance(p, dict):
         days = sorted(p)
         out = [f"{len(days)} dates: {days[:3]} ... {days[-2:]}"]
