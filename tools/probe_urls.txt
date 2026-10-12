@@ -1,0 +1,7 @@
+https://www.recreation.gov/api/permitinyo/233260/availabilityv2?start_date=2027-06-01&end_date=2027-06-30&commercial_acct=false
+https://www.recreation.gov/api/permitinyo/233260/availabilityv2?start_date=2026-10-12&end_date=2026-10-31&commercial_acct=false
+https://www.recreation.gov/api/permitinyo/233260/availability?start_date=2026-10-12&end_date=2026-10-31&commercial_acct=false
+https://www.recreation.gov/api/permitinyo/233262/availabilityv2?start_date=2027-07-01&end_date=2027-07-31&commercial_acct=false
+https://www.recreation.gov/api/permitinyo/233262/availabilityv2?start_date=2026-10-12&end_date=2026-10-31&commercial_acct=false
+https://www.recreation.gov/api/permitcontent/233260
+https://www.recreation.gov/api/permits/233260/availability/month?start_date=2026-10-01T00:00:00.000Z&commercial_acct=false
