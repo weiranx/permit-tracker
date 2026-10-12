@@ -3,7 +3,7 @@ import json, re, time, urllib.request
 UA = "Mozilla/5.0 (permit-tracker research)"
 def get(u):
     return urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=30).read().decode("utf-8", "replace")
-html = get("https://www.recreation.gov/permits/445859")
+html = get("https://www.recreation.gov/permits/4675321")
 mains = sorted(set(re.findall(r'src="(/[^"]+\.js)"', html)))
 chunks = set()
 for s in mains:
@@ -16,7 +16,7 @@ interesting = [c for c in chunks if re.search(r"ermit|tinerar|ilderness|ottery|v
 print("interesting:", interesting[:40])
 order = interesting + [c for c in sorted(chunks) if c not in interesting]
 found = {}
-for i, c in enumerate(order[:400]):
+for i, c in enumerate(order[:60]):
     try:
         js = get("https://www.recreation.gov" + c)
     except Exception as e:
@@ -26,11 +26,12 @@ for i, c in enumerate(order[:400]):
         if "permit" in p and p not in found:
             found[p] = c
             print(f"{c.split('/')[-1]}: {p}")
-    if "permititinerary" in js:
+    for kw in ("itinerary", "/availability"):
+      if kw in js and False:
         for m in list(re.finditer("permititinerary", js))[:15]:
             print(f"  CTX {c.split('/')[-1]}: {js[max(0,m.start()-200):m.end()+200]!r}")
     time.sleep(0.2)
-print("\n== permitmapping ==")
+import sys; sys.exit(0)
 try:
     print(get("https://www.recreation.gov/api/permitcontent/permitmapping")[:4000])
 except Exception as e:

@@ -11,7 +11,7 @@ def get(u):
         return "ERR", repr(e)[:200]
 B = "https://www.recreation.gov/api"
 _, m = get(B + "/permitcontent/permitmapping"); m = m["payload"]
-groups = {k: m[k] for k in ("land_permit_ids", "day_use_permit_ids", "itinerary_permit_ids")}
+groups = {"land_permit_ids": m["land_permit_ids"]}
 for g, ids in groups.items():
     print(f"\n######## {g}")
     for pid in ids:
@@ -30,7 +30,7 @@ for g, ids in groups.items():
                     line += f"\n    inyo {mo[:7]}: {c2} dates={len(pl)} released={rel} nonzero={nz} sample={sample}"
                 else:
                     line += f"\n    inyo {mo[:7]}: {c2} {a}"
-                time.sleep(1)
+                time.sleep(3)
         else:
             c2, a = get(f"{B}/permits/{pid}/availability/month?start_date=2026-11-01T00:00:00.000Z&commercial_acct=false")
             if isinstance(a, dict):
@@ -45,4 +45,4 @@ for g, ids in groups.items():
                     c3, a3 = get(u)
                     line += f"\n    {u.split('/api')[1][:60]}: {c3} {str(a3)[:160]}"
         print(line, flush=True)
-        time.sleep(1)
+        time.sleep(3)
