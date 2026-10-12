@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "*/10 * * * *"   # GitHub may delay or skip runs at busy times
   workflow_dispatch:
+  push:                      # re-check right away when the config or code changes
+    branches: [main]
+    paths:
+      - config.json
+      - "permit_tracker/**"
+      - .github/workflows/check-permits.yml
 
 concurrency:
   group: check-permits
