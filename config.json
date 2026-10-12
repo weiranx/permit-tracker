@@ -23,18 +23,6 @@
       "min_party": 2
     },
     {
-      "name": "Whitney day hike",
-      "permit_id": "445860",
-      "divisions": [
-        "406"
-      ],
-      "dates": [
-        "2027-07-17",
-        "2027-07-24"
-      ],
-      "min_party": 1
-    },
-    {
       "name": "Inyo trailheads (Bishop Pass / Piute)",
       "permit_id": "233262",
       "division_names": [
