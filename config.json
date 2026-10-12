@@ -44,6 +44,16 @@
       "start": "2027-07-01",
       "end": "2027-08-31",
       "min_party": 2
+    },
+    {
+      "name": "whitney",
+      "permit_id": "445860",
+      "divisions": [
+        "406"
+      ],
+      "min_party": 1,
+      "start": "2026-10-18",
+      "end": "2026-10-18"
     }
   ]
 }
