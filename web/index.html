@@ -68,6 +68,38 @@
   td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .up { color: var(--open); font-weight: 600; }
   footer { margin-top: 32px; font-size: 12px; color: var(--muted); }
+  button { font: inherit; cursor: pointer; }
+  .btn.primary { background: var(--accent); color: var(--card); border-color: var(--accent); }
+  .btn.danger { color: var(--warn); }
+  .btn[disabled] { opacity: .5; cursor: default; }
+  .btn.sm { padding: 3px 9px; font-size: 12px; }
+  .row-actions { display: flex; gap: 6px; }
+  .banner { border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: 14px;
+            background: var(--open-bg); color: var(--text); display: none; }
+  .banner.show { display: block; }
+  .banner.err { background: var(--full-bg); color: var(--warn); }
+  dialog { border: 1px solid var(--line); border-radius: 14px; padding: 0; width: min(560px, calc(100vw - 32px));
+           background: var(--card); color: var(--text); }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  dialog form { padding: 20px; display: grid; gap: 14px; }
+  dialog h3 { margin: 0; font-size: 18px; }
+  label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
+  label.f small, .hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+  input[type=text], input[type=password], input[type=number], input[type=date], select {
+    font: inherit; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--text); width: 100%; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .picker { max-height: 210px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; }
+  .picker label { display: flex; gap: 8px; align-items: baseline; padding: 3px 0; font-size: 14px; font-weight: 400; }
+  .picker label small { color: var(--muted); }
+  .seg { display: flex; gap: 14px; font-size: 14px; }
+  .seg label, .wk label { display: flex; gap: 5px; align-items: center; font-weight: 400; }
+  .wk { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; }
+  .chipset { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chipset .chip button { border: 0; background: none; color: inherit; padding: 0 0 0 4px; }
+  .form-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .form-err { color: var(--warn); font-size: 13px; min-height: 1em; }
+  .tokstate { font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -76,10 +108,72 @@
     <h1>⛰️ Permit Tracker</h1>
     <span class="meta" id="updated">Loading…</span>
     <div class="actions">
-      <a class="btn" id="edit" href="#">Edit watches</a>
+      <button class="btn primary" id="add">+ Add watch</button>
+      <button class="btn" id="tokbtn">Connect GitHub</button>
       <a class="btn" id="runs" href="#">Run history</a>
     </div>
   </header>
+  <div class="banner" id="banner"></div>
+
+  <dialog id="tokdlg">
+    <form method="dialog" id="tokform">
+      <h3>Connect GitHub to edit watches</h3>
+      <div class="hint">
+        Saving a watch commits <code>config.json</code> to your repo, which needs a GitHub token.
+        <ol style="padding-left:18px;margin:8px 0">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">new fine-grained token</a>.</li>
+          <li><b>Repository access:</b> Only select repositories → <code>weiranx/permit-tracker</code>.</li>
+          <li><b>Permissions:</b> Contents → Read and write. Nothing else.</li>
+        </ol>
+        <b>What it can do:</b> read and change files in this one repo, nothing else on your account.
+        <b>Where it lives:</b> only in this browser's local storage, sent only to api.github.com.
+        Anyone using this browser profile could use it, so click <i>Forget</i> on shared computers.
+      </div>
+      <label class="f">Token <input type="password" id="tokinput" autocomplete="off" placeholder="github_pat_…"></label>
+      <div class="form-err" id="tokerr"></div>
+      <div class="form-actions">
+        <button class="btn danger" type="button" id="tokforget">Forget token</button>
+        <button class="btn" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" type="submit" id="toksave">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="wdlg">
+    <form method="dialog" id="wform">
+      <h3 id="wtitle">Add watch</h3>
+      <label class="f">Name <input type="text" id="wname" required placeholder="Whitney overnight"></label>
+      <label class="f">Permit <select id="wpermit"></select></label>
+      <div class="f" style="display:grid;gap:4px">
+        <span style="font-size:13px;font-weight:600">Trailheads <small class="hint" id="wcount"></small></span>
+        <input type="text" id="wfilter" placeholder="Filter trailheads…">
+        <div class="picker" id="wdivs"></div>
+      </div>
+      <div class="seg">
+        <label><input type="radio" name="mode" value="range" checked> Date range</label>
+        <label><input type="radio" name="mode" value="dates"> Specific dates</label>
+      </div>
+      <div id="mrange" style="display:grid;gap:10px">
+        <div class="two">
+          <label class="f">First entry date <input type="date" id="wstart"></label>
+          <label class="f">Last entry date <input type="date" id="wend"></label>
+        </div>
+        <div class="wk" id="wwk"></div>
+        <div class="hint">Leave all days unticked to watch every day.</div>
+      </div>
+      <div id="mdates" style="display:none;gap:8px">
+        <div style="display:flex;gap:8px"><input type="date" id="wdate"><button class="btn" type="button" id="wdateadd">Add</button></div>
+        <div class="chipset" id="wdates"></div>
+      </div>
+      <label class="f">Party size <small>alerts only when at least this many spots are left</small>
+        <input type="number" id="wparty" min="1" max="30" value="2"></label>
+      <div class="form-err" id="werr"></div>
+      <div class="form-actions">
+        <button class="btn" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" type="submit" id="wsave">Save</button>
+      </div>
+    </form>
+  </dialog>
 
   <h2>Open now</h2>
   <div class="card"><div class="opennow" id="opennow"><span class="empty">Loading…</span></div></div>
@@ -100,7 +194,6 @@
 </main>
 <script>
 const REPO = "weiranx/permit-tracker";
-document.getElementById("edit").href = `https://github.com/${REPO}/edit/main/config.json`;
 document.getElementById("runs").href = `https://github.com/${REPO}/actions/workflows/check-permits.yml`;
 
 const el = (tag, attrs = {}, ...kids) => {
@@ -115,7 +208,11 @@ const ago = iso => {
   return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
 };
 
+const btn = (label, cls, fn) => { const b = el("button", { class: cls, type: "button" }, label); b.onclick = fn; return b; };
+let DATA = null;
+
 function render(data) {
+  DATA = data;
   const up = document.getElementById("updated");
   up.textContent = `Checked ${ago(data.generated_at)}`;
   up.title = data.generated_at;
@@ -141,14 +238,19 @@ function render(data) {
 
   // Watches
   const ws = document.getElementById("watches");
-  ws.replaceChildren(...data.watches.map(w => {
+  if (!data.watches.length) {
+    ws.replaceChildren(el("div", { class: "card empty" }, "No watches yet. Use “+ Add watch” to start one."));
+  } else ws.replaceChildren(...data.watches.map((w, idx) => {
     const counts = { open: 0, full: 0, unreleased: 0 };
     w.rows.forEach(r => counts[r.state]++);
     const card = el("div", { class: "card" },
       el("div", { class: "watch-head" },
         el("h3", {}, w.name),
-        el("a", { href: `https://www.recreation.gov/permits/${w.permit_id}`, target: "_blank", rel: "noopener", class: "meta" },
-          w.permit_name || `Permit ${w.permit_id}`)),
+        el("div", { class: "row-actions" },
+          el("a", { href: `https://www.recreation.gov/permits/${w.permit_id}`, target: "_blank", rel: "noopener", class: "meta", style: "margin-right:6px" },
+            w.permit_name || `Permit ${w.permit_id}`),
+          btn("Edit", "btn sm", () => openWatch(idx, w.name)),
+          btn("Delete", "btn sm danger", () => deleteWatch(idx, w.name)))),
       el("div", { class: "meta" },
         `${fmtDay(w.start)} – ${fmtDay(w.end)}` +
         (w.weekdays.length ? ` · ${w.weekdays.join(", ")}` : "") + ` · party of ${w.min_party}`),
@@ -192,13 +294,249 @@ function render(data) {
     : el("span", { class: "empty" }, "No changes seen yet. Cancellations show up here."));
 }
 
-fetch(`status.json?t=${Date.now()}`)
-  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(render)
-  .catch(e => {
-    document.getElementById("updated").textContent = "No data yet: the first check hasn't published.";
-    document.getElementById("opennow").replaceChildren(el("span", { class: "empty" }, String(e)));
+// ---------- data loading ----------
+async function load() {
+  const r = await fetch(`status.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!r.ok) throw new Error(`status.json: HTTP ${r.status}`);
+  return r.json();
+}
+load().then(render).catch(e => {
+  document.getElementById("updated").textContent = "No data yet: the first check hasn't published.";
+  document.getElementById("opennow").replaceChildren(el("span", { class: "empty" }, String(e)));
+});
+
+const banner = (msg, isErr = false) => {
+  const b = document.getElementById("banner");
+  b.textContent = msg; b.className = "banner show" + (isErr ? " err" : "");
+};
+
+// After a save, the push triggers a check; poll until a newer snapshot lands.
+function waitForRefresh(since) {
+  let tries = 0;
+  const tick = async () => {
+    tries++;
+    try {
+      const d = await load();
+      if (d.generated_at > since) {
+        render(d);
+        banner("Updated with the new check.");
+        setTimeout(() => document.getElementById("banner").className = "banner", 6000);
+        return;
+      }
+    } catch (_) {}
+    if (tries < 20) setTimeout(tick, 20000);
+    else banner("Saved. The check is taking a while; reload later or open Run history.");
+  };
+  setTimeout(tick, 30000);
+}
+
+// ---------- GitHub token + config.json ----------
+const TOKEN_KEY = "permit-tracker-gh-token";
+const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (_) { return ""; } };
+const setToken = t => { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (_) {} };
+const API = `https://api.github.com/repos/${REPO}/contents/config.json`;
+
+function refreshTokBtn() {
+  document.getElementById("tokbtn").textContent = getToken() ? "GitHub connected ✓" : "Connect GitHub";
+}
+refreshTokBtn();
+
+async function gh(method, body, token = getToken()) {
+  const r = await fetch(API + (method === "GET" ? "?ref=main" : ""), {
+    method,
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json",
+               "X-GitHub-Api-Version": "2022-11-28", ...(body ? { "Content-Type": "application/json" } : {}) },
+    body: body ? JSON.stringify(body) : undefined,
   });
+  if (r.status === 401) throw new Error("GitHub rejected the token (expired or wrong). Reconnect GitHub.");
+  if (r.status === 403 || r.status === 404) throw new Error("The token can't reach config.json. It needs Contents read/write on weiranx/permit-tracker.");
+  if (r.status === 409) throw new Error("config.json changed on GitHub since you opened it. Try again.");
+  if (!r.ok) throw new Error(`GitHub error ${r.status}`);
+  return r.json();
+}
+const b64decode = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, "")), c => c.charCodeAt(0)));
+const b64encode = s => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+
+async function readConfig() {
+  const f = await gh("GET");
+  return { cfg: JSON.parse(b64decode(f.content)), sha: f.sha };
+}
+async function writeConfig(cfg, sha, message) {
+  await gh("PUT", { message, sha, branch: "main", content: b64encode(JSON.stringify(cfg, null, 2) + "\n") });
+}
+
+// Every edit re-reads config.json first so we never overwrite a newer copy.
+async function mutate(message, fn) {
+  if (!getToken()) { openToken(); return false; }
+  const { cfg, sha } = await readConfig();
+  fn(cfg);
+  await writeConfig(cfg, sha, message);
+  const since = DATA ? DATA.generated_at : "";
+  banner("Saved to config.json. A fresh check is running; this page refreshes when it finishes (usually 1 to 2 min).");
+  waitForRefresh(since);
+  return true;
+}
+
+const tokdlg = document.getElementById("tokdlg");
+function openToken() {
+  document.getElementById("tokinput").value = "";
+  document.getElementById("tokerr").textContent = "";
+  tokdlg.showModal();
+}
+document.getElementById("tokbtn").onclick = openToken;
+document.getElementById("tokforget").onclick = () => { setToken(""); refreshTokBtn(); tokdlg.close(); banner("Token removed from this browser."); };
+document.getElementById("tokform").onsubmit = async e => {
+  if (e.submitter && e.submitter.value === "cancel") return;
+  e.preventDefault();
+  const t = document.getElementById("tokinput").value.trim();
+  const err = document.getElementById("tokerr");
+  if (!t) { err.textContent = "Paste a token first."; return; }
+  err.textContent = "Checking…";
+  try {
+    await gh("GET", null, t);
+    setToken(t); refreshTokBtn(); tokdlg.close();
+    banner("GitHub connected. You can add, edit and delete watches now.");
+  } catch (x) { err.textContent = x.message; }
+};
+
+// ---------- watch form ----------
+const WEEK = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const wdlg = document.getElementById("wdlg");
+let editing = null;      // {idx, name} or null for a new watch
+let pickedDates = [];
+
+const $ = id => document.getElementById(id);
+$("wwk").replaceChildren(...WEEK.map(d => el("label", {}, el("input", { type: "checkbox", value: d }), d[0].toUpperCase() + d.slice(1))));
+
+function catalog() {
+  const c = { ...(DATA && DATA.catalog || {}) };
+  return c;
+}
+function fillPermits(selected) {
+  const c = catalog();
+  const opts = Object.entries(c).map(([id, p]) => el("option", { value: id }, `${p.name} (${id})`));
+  $("wpermit").replaceChildren(...opts);
+  if (selected && c[selected]) $("wpermit").value = selected;
+}
+function fillDivisions(checked = new Set()) {
+  const p = catalog()[$("wpermit").value];
+  const f = $("wfilter").value.toLowerCase();
+  const divs = (p ? p.divisions : []).filter(d => !f || d.name.toLowerCase().includes(f) || (d.code || "").toLowerCase().includes(f));
+  $("wdivs").replaceChildren(...(divs.length ? divs.map(d => el("label", {},
+      el("input", { type: "checkbox", value: d.id, ...(checked.has(d.id) ? { checked: "" } : {}) }),
+      el("span", {}, d.name, " ", el("small", {}, [d.code, d.district].filter(Boolean).join(" · ")))))
+    : [el("span", { class: "hint" }, p ? "No trailheads match." : "Trailhead list not loaded yet.")]));
+  updateCount();
+}
+let checkedDivs = new Set();
+$("wdivs").onchange = e => { if (e.target.checked) checkedDivs.add(e.target.value); else checkedDivs.delete(e.target.value); updateCount(); };
+const updateCount = () => $("wcount").textContent = checkedDivs.size ? `${checkedDivs.size} selected` : "";
+$("wfilter").oninput = () => fillDivisions(checkedDivs);
+$("wpermit").onchange = () => { checkedDivs = new Set(); $("wfilter").value = ""; fillDivisions(checkedDivs); };
+
+function setMode(m) {
+  document.querySelector(`input[name=mode][value=${m}]`).checked = true;
+  $("mrange").style.display = m === "range" ? "grid" : "none";
+  $("mdates").style.display = m === "dates" ? "grid" : "none";
+}
+document.querySelectorAll("input[name=mode]").forEach(r => r.onchange = () => setMode(r.value));
+function drawDates() {
+  pickedDates.sort();
+  $("wdates").replaceChildren(...pickedDates.map(d => {
+    const x = el("button", { type: "button", title: "Remove" }, "×");
+    x.onclick = () => { pickedDates = pickedDates.filter(v => v !== d); drawDates(); };
+    return el("span", { class: "chip open" }, fmtDay(d), x);
+  }));
+}
+$("wdateadd").onclick = () => {
+  const v = $("wdate").value;
+  if (v && !pickedDates.includes(v)) { pickedDates.push(v); drawDates(); }
+};
+
+async function openWatch(idx = null, name = null) {
+  if (!getToken()) { openToken(); return; }
+  editing = idx === null ? null : { idx, name };
+  $("werr").textContent = "";
+  $("wfilter").value = "";
+  let w = { name: "", permit_id: Object.keys(catalog())[0], divisions: [], min_party: 2 };
+  if (editing) {
+    try {
+      const { cfg } = await readConfig();
+      const cur = cfg.watches[idx];
+      if (!cur || cur.name !== name) { banner("config.json changed since this page loaded. Reload and try again.", true); return; }
+      w = cur;
+    } catch (x) { banner(x.message, true); return; }
+  }
+  $("wtitle").textContent = editing ? "Edit watch" : "Add watch";
+  $("wname").value = w.name || "";
+  fillPermits(String(w.permit_id));
+  const p = catalog()[$("wpermit").value];
+  checkedDivs = new Set((w.divisions || []).map(String));
+  // Older configs matched trailheads by name; turn those into checked boxes.
+  if (p && w.division_names) for (const d of p.divisions)
+    if (w.division_names.some(n => d.name.toLowerCase().includes(n.toLowerCase()))) checkedDivs.add(d.id);
+  fillDivisions(checkedDivs);
+  pickedDates = [...(w.dates || [])];
+  drawDates();
+  setMode(w.dates && w.dates.length ? "dates" : "range");
+  $("wstart").value = w.start || "";
+  $("wend").value = w.end || "";
+  const wk = new Set((w.weekdays || []).map(d => d.toLowerCase().slice(0, 3)));
+  $("wwk").querySelectorAll("input").forEach(i => i.checked = wk.has(i.value));
+  $("wparty").value = w.min_party || 1;
+  wdlg.showModal();
+}
+$("add").onclick = () => openWatch();
+
+$("wform").onsubmit = async e => {
+  if (e.submitter && e.submitter.value === "cancel") return;
+  e.preventDefault();
+  const err = $("werr");
+  const mode = document.querySelector("input[name=mode]:checked").value;
+  const w = {
+    name: $("wname").value.trim(),
+    permit_id: $("wpermit").value,
+    divisions: [...checkedDivs],
+    min_party: Math.max(1, parseInt($("wparty").value, 10) || 1),
+  };
+  if (mode === "range") {
+    w.start = $("wstart").value; w.end = $("wend").value;
+    const wk = [...$("wwk").querySelectorAll("input:checked")].map(i => i.value);
+    if (wk.length) w.weekdays = wk;
+  } else w.dates = [...pickedDates];
+  if (!w.name) return err.textContent = "Give the watch a name.";
+  if (!w.permit_id) return err.textContent = "Pick a permit.";
+  if (!w.divisions.length) return err.textContent = "Pick at least one trailhead.";
+  if (mode === "range" && (!w.start || !w.end)) return err.textContent = "Pick a first and last date.";
+  if (mode === "range" && w.end < w.start) return err.textContent = "The last date is before the first.";
+  if (mode === "dates" && !w.dates.length) return err.textContent = "Add at least one date.";
+  err.textContent = "Saving…"; $("wsave").disabled = true;
+  try {
+    await mutate(editing ? `Edit watch: ${w.name}` : `Add watch: ${w.name}`, cfg => {
+      if (editing) {
+        const cur = cfg.watches[editing.idx];
+        if (!cur || cur.name !== editing.name) throw new Error("config.json changed since you opened this. Reload and try again.");
+        const keep = { ...cur };   // carry over keys this form doesn't edit (e.g. api)
+        for (const k of ["name", "permit_id", "divisions", "division_names", "start", "end", "dates", "weekdays", "min_party"]) delete keep[k];
+        cfg.watches[editing.idx] = { ...w, ...keep };
+      } else cfg.watches.push(w);
+    });
+    wdlg.close();
+  } catch (x) { err.textContent = x.message; }
+  finally { $("wsave").disabled = false; }
+};
+
+async function deleteWatch(idx, name) {
+  if (!getToken()) { openToken(); return; }
+  if (!confirm(`Delete the watch "${name}"?`)) return;
+  try {
+    await mutate(`Delete watch: ${name}`, cfg => {
+      const cur = cfg.watches[idx];
+      if (!cur || cur.name !== name) throw new Error("config.json changed since this page loaded. Reload and try again.");
+      cfg.watches.splice(idx, 1);
+    });
+  } catch (x) { banner(x.message, true); }
+}
 </script>
 </body>
 </html>

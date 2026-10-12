@@ -56,8 +56,18 @@ Yosemite (445859) and SEKI (445857) wilderness use a different API and aren't su
 for each trailhead you watch, and recent changes (cancellations). Every Action run
 refreshes it. The page is static (`web/index.html`) and reads `status.json`, which
 `check --json status.json` writes; the Action publishes both to the `gh-pages` branch.
-To change what's watched, use the page's **Edit watches** button (it opens
-`config.json` on GitHub); saving it triggers a fresh check.
+### Adding, editing and deleting watches from the page
+
+Click **Connect GitHub** and paste a fine-grained personal access token:
+
+- **Repository access:** only `weiranx/permit-tracker`
+- **Permissions:** Contents → Read and write (nothing else)
+
+The token is kept only in that browser's `localStorage` and sent only to
+`api.github.com`. Saving a watch commits `config.json` (re-reading it first so a newer
+copy is never overwritten); that push triggers a fresh check, and the page refreshes
+itself when the new results land. The trailhead picker comes from the `catalog` in
+`status.json` (Whitney, Inyo NF, Sierra NF, plus any permit you already watch).
 
 ## Run it on GitHub Actions (no computer needed)
 

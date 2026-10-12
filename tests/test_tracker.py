@@ -119,6 +119,10 @@ class TrackerTests(unittest.TestCase):
         self.assertEqual(w["rows"][0]["state"], "open")
         self.assertEqual(w["rows"][0]["division"], "Mt. Whitney Trail (Overnight)")
 
+    def test_catalog_lists_trailheads(self):
+        cat = cli.build_catalog(cli.Tracker(FakeClient([{}])), self.cfg)
+        self.assertEqual([d["id"] for d in cat["445860"]["divisions"]], ["406", "166"])
+
     def test_skips_unreleased_and_non_quota(self):
         self.cfg["watches"][0]["divisions"] = ["166", "520"]
         self.assertFalse(self.run_with(UNRELEASED).called)

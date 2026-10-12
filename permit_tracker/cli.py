@@ -21,6 +21,12 @@ INYO_STYLE = {
     "233262",  # Inyo NF wilderness (trailhead quotas)
     "445858",  # Sierra NF wilderness
 }
+# Permits offered in the dashboard's "add watch" picker.
+CATALOG = {
+    "445860": "Mt. Whitney",
+    "233262": "Inyo NF wilderness",
+    "445858": "Sierra NF wilderness",
+}
 WEEKDAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
 
@@ -163,6 +169,23 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False,
     return alerts
 
 
+def build_catalog(tracker: Tracker, cfg: dict) -> dict:
+    """Permit -> trailhead list for the dashboard's picker. Reuses permit
+    details already fetched this run; only uncached permits cost a request."""
+    ids = list(CATALOG) + [str(w["permit_id"]) for w in cfg["watches"] if str(w["permit_id"]) not in CATALOG]
+    out = {}
+    for pid in ids:
+        name, divs = tracker.names(pid)
+        if not divs:
+            continue
+        out[pid] = {
+            "name": name if name != pid else CATALOG.get(pid, pid),
+            "divisions": sorted(({"id": k, **v} for k, v in divs.items()),
+                                key=lambda d: d["name"].lower()),
+        }
+    return out
+
+
 def cmd_watch(args, cfg):
     client = RecGovClient(min_interval=float(cfg.get("min_request_interval_s", 2)))
     tracker, state = Tracker(client), State(cfg.get("state_db", "permit_state.sqlite3"))
@@ -180,7 +203,8 @@ def cmd_check(args, cfg):
     client = RecGovClient(min_interval=float(cfg.get("min_request_interval_s", 2)))
     state = State(cfg.get("state_db", "permit_state.sqlite3"))
     report: list = []
-    n = run_once(cfg, Tracker(client), state, report=report)
+    tracker = Tracker(client)
+    n = run_once(cfg, tracker, state, report=report)
     print(f"\n{n} new opening(s).")
     if args.json:
         snapshot = {
@@ -189,6 +213,7 @@ def cmd_check(args, cfg):
             "new_openings": n,
             "watches": report,
             "recent_changes": state.recent(40),
+            "catalog": build_catalog(tracker, cfg),
         }
         with open(args.json, "w") as f:
             json.dump(snapshot, f, indent=1)
