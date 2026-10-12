@@ -10,13 +10,14 @@ from datetime import date, datetime
 
 from . import notify
 from .api import NotFound, RateLimited, RecGovClient, month_chunks
-from .parse import Slot, parse_divisions, parse_inyo, parse_permits_month, permit_name
+from .parse import (Slot, has_lottery, parse_divisions, parse_inyo,
+                    parse_permits_month, permit_name)
 from .state import State
 
 # Permits known to use the permitinyo quota endpoint. Anything else is tried
 # there first and falls back to the generic endpoint on 404.
 INYO_STYLE = {
-    "233260",  # Mt. Whitney (Inyo NF)
+    "445860",  # Mt. Whitney (233260 is the retired legacy ID)
     "233262",  # Inyo NF wilderness (trailhead quotas)
     "445858",  # Sierra NF wilderness
 }
@@ -31,17 +32,20 @@ class Tracker:
     def __init__(self, client: RecGovClient):
         self.client = client
         self._api_for: dict[str, str] = {}
-        self._names: dict[str, tuple[str, dict]] = {}
+        self._content: dict[str, dict] = {}
+
+    def content(self, permit_id: str) -> dict:
+        if permit_id not in self._content:
+            try:
+                self._content[permit_id] = self.client.permit_content(permit_id)
+            except (NotFound, RateLimited, OSError, ValueError) as e:
+                print(f"[warn] couldn't load details for {permit_id}: {e}", file=sys.stderr)
+                return {}
+        return self._content[permit_id]
 
     def names(self, permit_id: str) -> tuple[str, dict]:
-        if permit_id not in self._names:
-            try:
-                content = self.client.permit_content(permit_id)
-                self._names[permit_id] = (permit_name(content), parse_divisions(content))
-            except (NotFound, RateLimited, OSError) as e:
-                print(f"[warn] couldn't load names for {permit_id}: {e}", file=sys.stderr)
-                return (permit_id, {})
-        return self._names[permit_id]
+        c = self.content(permit_id)
+        return (permit_name(c) or permit_id, parse_divisions(c))
 
     def fetch(self, permit_id: str, start: date, end: date, api: str = "auto") -> list[Slot]:
         api = self._api_for.get(permit_id, api)
@@ -104,6 +108,7 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> 
             print(f"[error] {w.get('name', pid)}: {e}", file=sys.stderr)
             continue
         pname, divs = tracker.names(pid)
+        lottery = has_lottery(tracker.content(pid))
         name_bits = [n.lower() for n in w.get("division_names") or []]
         for s in sorted(slots, key=lambda s: (s.date, s.division_id)):
             div_name = divs.get(s.division_id, {}).get("name") or s.division_id
@@ -111,7 +116,11 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> 
                 continue
             if name_bits and not any(b in div_name.lower() for b in name_bits):
                 continue
-            if not ok_day(s.date) or s.walkup:
+            if not ok_day(s.date) or s.walkup or s.not_yet_released or s.non_quota:
+                continue
+            if lottery and s.total and s.remaining == s.total:
+                # Lottery permits (Whitney) show untouched full quotas for dates
+                # the lottery hasn't released yet. Real openings are partial.
                 continue
             old = state.update(pid, s.division_id, s.date, s.remaining)
             if not quiet:
@@ -169,7 +178,11 @@ def cmd_peek(args, _cfg):
             continue
         name = divs.get(s.division_id, {}).get("name") or s.division_id
         tot = f"/{s.total}" if s.total is not None else ""
-        print(f"{s.date}  {name[:40]:<40} {s.remaining:>3}{tot}{'  walk-up' if s.walkup else ''}")
+        note = ("  not released" + (f" (opens {s.release_date[:10]})" if s.release_date else "")
+                if s.not_yet_released else "  walk-up only" if s.walkup
+                else "  non-quota" if s.non_quota else "")
+        count = "  -" if s.non_quota else f"{s.remaining:>3}{tot}"
+        print(f"{s.date}  {name[:40]:<40} {count}{note}")
 
 
 def main(argv=None):

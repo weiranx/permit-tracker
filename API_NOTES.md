@@ -5,17 +5,15 @@ the server; the browser calls unauthenticated JSON endpoints under
 `https://www.recreation.gov/api/`. No API key, no login, and none of it is documented.
 The official RIDB API (`ridb.recreation.gov`) has facility metadata but **no availability**.
 
-## Where these notes come from
+## How this was verified
 
-The sandbox this was built in can't reach recreation.gov (blocked by its network
-policy), so nothing here was captured live by me. It's assembled from the source of
-open-source clients that call these endpoints today:
-
-- [mdeckebach/recdotgov](https://github.com/mdeckebach/recdotgov): Inyo permit snapshots (`permitinyo`, `permitcontent`)
-- [JamalMansuri/campsiterecon](https://github.com/JamalMansuri/campsiterecon): `references/api-response-shapes.md`, checked live 2026-09-20
-- [camply discussion #22](https://github.com/juftin/camply/discussions/22): generic `permits` endpoint
-
-Run `python3 -m permit_tracker divisions 233260` first on your machine to confirm.
+Endpoint paths came first from the source of open-source clients
+([mdeckebach/recdotgov](https://github.com/mdeckebach/recdotgov),
+[JamalMansuri/campsiterecon](https://github.com/JamalMansuri/campsiterecon),
+[camply #22](https://github.com/juftin/camply/discussions/22)). Every shape below was
+then **confirmed live on 2026-10-12** from a GitHub Actions runner, which is also where
+three bugs in the first draft showed up (wrong Whitney ID, partial-month ranges,
+unreleased dates looking open).
 
 ## 1. Permit metadata: `GET /api/permitcontent/{permit_id}`
 
@@ -29,17 +27,30 @@ A **division** is a trailhead / entry point / zone; it's the unit quotas are set
 ## 2. Inyo-style quota permits: `GET /api/permitinyo/{permit_id}/availabilityv2`
 
 Params: `start_date=YYYY-MM-DD`, `end_date=YYYY-MM-DD`, `commercial_acct=false`.
-The tracker requests one calendar month per call.
+**The range must be exactly one calendar month** (1st to last day). Anything else →
+`400 {"error":"requested dates are invalid - can only be start/end of the month"}`.
+A permit this endpoint doesn't serve → `400 {"error":"invalid permit id"}`.
 
 ```
 payload: { "<YYYY-MM-DD>": { "<division_id>": {
     quota_usage_by_member_daily: { total, remaining },
     is_walkup, not_yet_released, release_date } } }
 ```
-Used by Mt. Whitney (233260), Inyo NF wilderness (233262), Sierra NF (445858) and
-other Sierra wilderness permits. The date is the **entry date**; `remaining` is
-people (or groups, depending on permit) left on that trailhead's quota.
-`is_walkup: true` rows are the in-person quota and can't be booked online.
+Confirmed for **Mt. Whitney (445860)**, Inyo NF wilderness (233262) and Sierra NF
+(445858). The date is the **entry date**; `remaining` is people left on that
+trailhead's quota. Things that look like availability but aren't:
+
+| Signal | Meaning |
+|---|---|
+| `not_yet_released: true` + `release_date` | Not bookable yet (Inyo: 6-month rolling window, 7 am PT) |
+| `is_walkup: true` | Inside the walk-up window; in-person only |
+| `remaining` ≈ 899990 | Non-quota trailhead, no limit |
+| Whitney `remaining == total` far out | Lottery dates not released yet; no flag is sent |
+| Month beyond the window | `{"payload": {}}` |
+
+Mt. Whitney's old ID **233260 is retired**: its generic endpoint returns empty data
+with `next_available_date` 2022. Whitney divisions: **166** = Mt. Whitney Trail
+(Overnight), **406** = Day Use (All Routes).
 
 ## 3. Generic permits: `GET /api/permits/{permit_id}/availability/month`
 
@@ -51,8 +62,7 @@ payload: { permit_id, next_available_date,
     date_availability: { "<ISO datetime>": { total, remaining, show_walkup, is_secret_quota } },
     quota_type_maps } } }
 ```
-Works for day-use and lottery-style permits (e.g. Half Dome 234652, Central Cascades
-4675311). Yosemite (445859) and SEKI (445857) wilderness permits **404 here**; they use
+Works for day-use and lottery-style permits; confirmed live for Half Dome (234652). Yosemite (445859) and SEKI (445857) wilderness permits **404 here**; they use
 an itinerary-based inventory API that I couldn't confirm, so they aren't supported yet.
 
 ## 4. Campgrounds (for reference): `GET /api/camps/availability/campground/{id}/month`

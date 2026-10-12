@@ -2,6 +2,8 @@
 
 Two shapes are handled:
 
+Shapes below were confirmed against live responses on 2026-10-12.
+
 permitinyo availabilityv2 (Inyo-style quota permits):
     {"payload": {"2026-07-14": {"<division_id>": {
         "quota_usage_by_member_daily": {"total": 60, "remaining": 3},
@@ -25,6 +27,12 @@ class Slot:
     total: int | None
     walkup: bool = False
     not_yet_released: bool = False
+    release_date: str | None = None
+
+    @property
+    def non_quota(self) -> bool:
+        # Non-quota trailheads report a huge sentinel (seen live: 899990).
+        return self.remaining >= 99999
 
 
 def _int(v):
@@ -54,6 +62,7 @@ def parse_inyo(body: dict) -> list[Slot]:
                 total=_int(q.get("total")),
                 walkup=bool(info.get("is_walkup")),
                 not_yet_released=bool(info.get("not_yet_released")),
+                release_date=info.get("release_date"),
             ))
     return slots
 
@@ -93,6 +102,10 @@ def parse_divisions(content: dict) -> dict[str, dict]:
                 "district": d.get("district", ""),
             }
     return out
+
+
+def has_lottery(content: dict) -> bool:
+    return bool((content.get("payload") or {}).get("has_lottery"))
 
 
 def permit_name(content: dict) -> str:

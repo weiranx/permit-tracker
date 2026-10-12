@@ -11,7 +11,7 @@ See [API_NOTES.md](API_NOTES.md) for how recreation.gov's availability calls wor
 ```bash
 # edit config.json: dates, trailheads, party size, ntfy topic
 python3 -m permit_tracker divisions 233262 --grep bishop   # find trailhead IDs
-python3 -m permit_tracker peek 233260 2027-07-01 2027-07-31 # eyeball availability
+python3 -m permit_tracker peek 445860 2027-07-01 2027-07-31 # eyeball availability
 python3 -m permit_tracker check         # one pass
 python3 -m permit_tracker watch         # poll forever, alert on new openings
 ```
@@ -31,7 +31,7 @@ on every poll. Every change is logged in `permit_state.sqlite3` (`history` table
 
 | key | meaning |
 |---|---|
-| `permit_id` | number from the recreation.gov URL (`/permits/233260`) |
+| `permit_id` | number from the recreation.gov URL (`/permits/445860`) |
 | `divisions` | trailhead IDs from the `divisions` command |
 | `division_names` | substring match on trailhead names, instead of IDs |
 | `start` / `end` or `dates` | entry-date range, or an explicit list |
@@ -43,7 +43,7 @@ on every poll. Every change is logged in `permit_state.sqlite3` (`history` table
 
 | permit | id |
 |---|---|
-| Mt. Whitney (day + overnight) | 233260 |
+| Mt. Whitney (day + overnight) | 445860 |
 | Inyo NF wilderness trailheads | 233262 |
 | Sierra NF wilderness | 445858 |
 | Half Dome (day use) | 234652 |

@@ -10,7 +10,7 @@
   "watches": [
     {
       "name": "Whitney overnight",
-      "permit_id": "233260",
+      "permit_id": "445860",
       "divisions": ["166"],
       "start": "2027-06-01",
       "end": "2027-09-30",
@@ -19,7 +19,7 @@
     },
     {
       "name": "Whitney day hike",
-      "permit_id": "233260",
+      "permit_id": "445860",
       "divisions": ["406"],
       "dates": ["2027-07-17", "2027-07-24"],
       "min_party": 1

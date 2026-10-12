@@ -66,6 +66,13 @@ class RecGovClient:
             except urllib.error.HTTPError as e:
                 if e.code == 404:
                     raise NotFound(url) from e
+                if e.code == 400:
+                    # permitinyo answers 400 {"error":"invalid permit id"} for
+                    # permits it doesn't serve; surface other 400s verbatim.
+                    detail = e.read().decode("utf-8", "replace")[:200]
+                    if "invalid permit id" in detail:
+                        raise NotFound(url) from e
+                    raise ValueError(f"400 from {url}: {detail}") from e
                 if e.code == 429:
                     # Retrying a 429 only extends the block. Back off for a while.
                     retry_after = e.headers.get("Retry-After")
@@ -88,7 +95,9 @@ class RecGovClient:
 
     def inyo_availability(self, permit_id: str, start: date, end: date) -> dict:
         """Quota-by-trailhead availability used by Inyo-style permits
-        (Mt. Whitney, Inyo NF, Sierra NF, and other Sierra wilderness permits)."""
+        (Mt. Whitney, Inyo NF, Sierra NF, and other Sierra wilderness permits).
+        start/end must be the first and last day of one calendar month, or the
+        API answers 400 "can only be start/end of the month"."""
         return self.get_json(f"/permitinyo/{permit_id}/availabilityv2", {
             "start_date": start.isoformat(),
             "end_date": end.isoformat(),
@@ -104,9 +113,10 @@ class RecGovClient:
 
 
 def month_chunks(start: date, end: date):
-    """Yield (first_day, last_day) pairs covering start..end, clipped to the range."""
+    """Yield (first_day, last_day) of every calendar month touching start..end.
+    Whole months only: permitinyo rejects partial-month ranges."""
     cur = start.replace(day=1)
     while cur <= end:
         last = cur.replace(day=calendar.monthrange(cur.year, cur.month)[1])
-        yield max(cur, start), min(last, end)
+        yield cur, last
         cur = last + timedelta(days=1)

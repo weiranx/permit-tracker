@@ -65,9 +65,15 @@ class ParseTests(unittest.TestCase):
 
     def test_month_chunks(self):
         self.assertEqual(list(month_chunks(date(2027, 6, 15), date(2027, 8, 3))), [
-            (date(2027, 6, 15), date(2027, 6, 30)),
+            (date(2027, 6, 1), date(2027, 6, 30)),
             (date(2027, 7, 1), date(2027, 7, 31)),
-            (date(2027, 8, 1), date(2027, 8, 3))])
+            (date(2027, 8, 1), date(2027, 8, 31))])
+
+
+UNRELEASED = {"payload": {"2027-07-17": {
+    "166": {"quota_usage_by_member_daily": {"total": 0, "remaining": 0}, "is_walkup": True,
+            "not_yet_released": True, "release_date": "2027-01-17T07:00:00-08:00"},
+    "520": {"quota_usage_by_member_daily": {"total": 899990, "remaining": 899990}, "is_walkup": False}}}}
 
 
 class TrackerTests(unittest.TestCase):
@@ -75,7 +81,7 @@ class TrackerTests(unittest.TestCase):
         self.tmp = tempfile.mkdtemp()
         self.state = State(os.path.join(self.tmp, "s.db"))
         self.cfg = {"notify": {}, "watches": [{
-            "name": "Whitney", "permit_id": "233260", "divisions": ["166"],
+            "name": "Whitney", "permit_id": "445860", "divisions": ["166"],
             "dates": ["2027-07-17"], "min_party": 2}]}
 
     def run_with(self, body):
@@ -102,6 +108,18 @@ class TrackerTests(unittest.TestCase):
             send = self.run_with(inyo({"2027-07-16": {"406": 5}, "2027-07-17": {"406": 5, "166": 5}}))
         self.assertEqual(send.call_count, 1)
         self.assertIn("Day Use", send.call_args[0][1])
+
+    def test_skips_unreleased_and_non_quota(self):
+        self.cfg["watches"][0]["divisions"] = ["166", "520"]
+        self.assertFalse(self.run_with(UNRELEASED).called)
+
+    def test_lottery_untouched_quota_is_not_an_opening(self):
+        lottery_content = {"payload": {**CONTENT["payload"], "has_lottery": True}}
+        with mock.patch.object(FakeClient, "permit_content", return_value=lottery_content):
+            body = {"payload": {"2027-07-17": {"166": {
+                "quota_usage_by_member_daily": {"total": 60, "remaining": 60}, "is_walkup": False}}}}
+            self.assertFalse(self.run_with(body).called)
+            self.assertTrue(self.run_with(inyo({"2027-07-17": {"166": 3}})).called)
 
     def test_falls_back_to_generic_endpoint(self):
         body = {"payload": {"availability": {"1": {"division_id": "1", "date_availability": {
