@@ -110,18 +110,21 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> 
         pname, divs = tracker.names(pid)
         lottery = has_lottery(tracker.content(pid))
         name_bits = [n.lower() for n in w.get("division_names") or []]
+        counts = {"open": 0, "full": 0, "not released": 0}
         for s in sorted(slots, key=lambda s: (s.date, s.division_id)):
             div_name = divs.get(s.division_id, {}).get("name") or s.division_id
             if want_divs and s.division_id not in want_divs:
                 continue
             if name_bits and not any(b in div_name.lower() for b in name_bits):
                 continue
-            if not ok_day(s.date) or s.walkup or s.not_yet_released or s.non_quota:
+            if not ok_day(s.date) or s.walkup or s.non_quota:
                 continue
-            if lottery and s.total and s.remaining == s.total:
+            if s.not_yet_released or (lottery and s.total and s.remaining == s.total):
                 # Lottery permits (Whitney) show untouched full quotas for dates
                 # the lottery hasn't released yet. Real openings are partial.
+                counts["not released"] += 1
                 continue
+            counts["open" if s.remaining >= min_party else "full"] += 1
             old = state.update(pid, s.division_id, s.date, s.remaining)
             if not quiet:
                 total = f"/{s.total}" if s.total is not None else ""
@@ -137,6 +140,8 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False) -> 
                     f"(watch: {w.get('name', pid)}, need {min_party}).",
                     booking_url(pid, s.date),
                 )
+        print(f"{w.get('name', pid)}: " + ", ".join(f"{v} {k}" for k, v in counts.items())
+              + (" (nothing published for these dates yet)" if not any(counts.values()) else ""))
     return alerts
 
 
