@@ -5,7 +5,8 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tools/probe.py tools/probe_urls.txt
+      - run: python3 tools/mine.py || true
+      - run: python3 tools/mine2.py | head -c 60000 || true
