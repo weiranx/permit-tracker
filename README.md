@@ -39,49 +39,27 @@ on every poll. Every change is logged in `permit_state.sqlite3` (`history` table
 | `min_party` | alert only when at least this many spots are left |
 | `api` | `auto` (default), `inyo`, or `permits` |
 
-## Common permit IDs
+## Supported permits
 
-| permit | id |
-|---|---|
-| Mt. Whitney (day + overnight) | 445860 |
-| Inyo NF wilderness trailheads | 233262 |
-| Sierra NF wilderness | 445858 |
-| Half Dome (day use) | 234652 |
+All of these were checked against the live API and appear in the dashboard's picker.
 
-Yosemite (445859) and SEKI (445857) wilderness use a different API and aren't supported yet.
+| Region | Permit | ID |
+|---|---|---|
+| Sierra Nevada | Mt. Whitney (day + overnight) | 445860 |
+| Sierra Nevada | Inyo NF wilderness trailheads | 233262 |
+| Sierra Nevada | Yosemite wilderness | 445859 |
+| Sierra Nevada | Sequoia & Kings Canyon wilderness | 445857 |
+| Sierra Nevada | Sierra NF wilderness | 445858 |
+| Sierra Nevada | Hoover Wilderness (Humboldt-Toiyabe NF) | 445856 |
+| Sierra Nevada | Half Dome day hike | 234652 |
+| Southern California | PCT overnight, Cleveland NF | 445862 |
+| Northern California | Lost Coast (King Range Wilderness) | 445864 |
+| Pacific Northwest | Enchantments daily lottery | 445863 |
+| Southwest | Paria Canyon overnight | 74984 |
+| Southwest | Cedar Mesa backpacking | 445861 |
 
-## Dashboard
-
-**https://weiranx.github.io/permit-tracker/** shows what's open now, a day-by-day strip
-for each trailhead you watch, and recent changes (cancellations). Every Action run
-refreshes it. The page is static (`web/index.html`) and reads `status.json`, which
-`check --json status.json` writes; the Action publishes both to the `gh-pages` branch.
-### Adding, editing and deleting watches from the page
-
-Click **Connect GitHub** and paste a fine-grained personal access token:
-
-- **Repository access:** only `weiranx/permit-tracker`
-- **Permissions:** Contents → Read and write (nothing else)
-
-The token is kept only in that browser's `localStorage` and sent only to
-`api.github.com`. Saving a watch commits `config.json` (re-reading it first so a newer
-copy is never overwritten); that push triggers a fresh check, and the page refreshes
-itself when the new results land. The trailhead picker comes from the `catalog` in
-`status.json` (Whitney, Inyo NF, Sierra NF, plus any permit you already watch).
-
-## Run it on GitHub Actions (no computer needed)
-
-`.github/workflows/check-permits.yml` runs `check` every ~10 min on GitHub's servers.
-
-1. Edit `config.json` (it's committed, so keep secrets out of it).
-2. Add a repo secret **`NTFY_TOPIC`** (Settings → Secrets and variables → Actions)
-   with your ntfy topic.
-3. Actions tab → *check permits* → **Run workflow** once to test.
-
-The alert state is carried between runs in the Actions cache. Caveats: GitHub's
-cron can lag by several minutes at busy times, and recreation.gov may throttle
-datacenter IPs more than a home connection. If runs start logging
-`[rate-limited]`, run `watch` at home instead.
+Itinerary-style national park permits (Glacier, Olympic, Grand Canyon backcountry and
+similar) use a different booking app whose availability call I haven't found yet.
 
 ## Tests
 

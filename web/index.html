@@ -414,8 +414,11 @@ function catalog() {
 }
 function fillPermits(selected) {
   const c = catalog();
-  const opts = Object.entries(c).map(([id, p]) => el("option", { value: id }, `${p.name} (${id})`));
-  $("wpermit").replaceChildren(...opts);
+  const groups = {};
+  for (const [id, p] of Object.entries(c)) (groups[p.region || "Other"] ||= []).push([id, p]);
+  $("wpermit").replaceChildren(...Object.entries(groups).map(([region, items]) =>
+    el("optgroup", { label: region }, ...items.map(([id, p]) =>
+      el("option", { value: id, title: p.full_name || p.name }, p.name)))));
   if (selected && c[selected]) $("wpermit").value = selected;
 }
 function fillDivisions(checked = new Set()) {

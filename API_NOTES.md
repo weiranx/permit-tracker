@@ -15,6 +15,22 @@ then **confirmed live on 2026-10-12** from a GitHub Actions runner, which is als
 three bugs in the first draft showed up (wrong Whitney ID, partial-month ranges,
 unreleased dates looking open).
 
+## 0. Which endpoint a permit uses: `GET /api/permitcontent/permitmapping`
+
+recreation.gov's own web app ships this lookup (found by reading its JS bundle). It
+sorts every permit ID into groups; the ones that matter here:
+
+| Group | Endpoint | Examples |
+|---|---|---|
+| `land_permit_ids` | permitinyo (§2) | 233262, 445856–445864, 74984 |
+| `itinerary_permit_ids` | separate itinerary app, not mapped yet | 4098362 (Olympic), 4675314–4675347 |
+| `day_use_permit_ids` | separate day-use app; the generic endpoint 404s | 16851, 274309 (The Wave) |
+| not listed | generic `permits` endpoint (§3) | 234652 (Half Dome) |
+
+Yosemite (445859) and SEKI (445857) are `land_permit_ids`, so they use permitinyo even
+though the generic endpoint 404s for them. SEKI returns `{"payload": {}}` outside its
+quota season; that's normal.
+
 ## 1. Permit metadata: `GET /api/permitcontent/{permit_id}`
 
 ```
@@ -36,8 +52,7 @@ payload: { "<YYYY-MM-DD>": { "<division_id>": {
     quota_usage_by_member_daily: { total, remaining },
     is_walkup, not_yet_released, release_date } } }
 ```
-Confirmed for **Mt. Whitney (445860)**, Inyo NF wilderness (233262) and Sierra NF
-(445858). The date is the **entry date**; `remaining` is people left on that
+Confirmed for every permit in the README's table except Half Dome. The date is the **entry date**; `remaining` is people left on that
 trailhead's quota. Things that look like availability but aren't:
 
 | Signal | Meaning |
@@ -45,7 +60,7 @@ trailhead's quota. Things that look like availability but aren't:
 | `not_yet_released: true` + `release_date` | Not bookable yet (Inyo: 6-month rolling window, 7 am PT) |
 | `is_walkup: true` | Inside the walk-up window; in-person only |
 | `remaining` ≈ 899990 | Non-quota trailhead, no limit |
-| Whitney `remaining == total` far out | Lottery dates not released yet; no flag is sent |
+| Every trailhead untouched on a lottery permit | Lottery hasn't run for that date (Whitney, Yosemite); no flag is sent, so the tracker infers it per date |
 | Month beyond the window | `{"payload": {}}` |
 
 Mt. Whitney's old ID **233260 is retired**: its generic endpoint returns empty data

@@ -135,6 +135,29 @@ class TrackerTests(unittest.TestCase):
             self.assertFalse(self.run_with(body).called)
             self.assertTrue(self.run_with(inyo({"2027-07-17": {"166": 3}})).called)
 
+    def test_lottery_released_date_keeps_untouched_trailheads(self):
+        # After a lottery date is released, a quiet trailhead can still sit at
+        # its full quota; it should count as open, not unreleased.
+        self.cfg["watches"][0]["divisions"] = ["166", "406"]
+        lottery_content = {"payload": {**CONTENT["payload"], "has_lottery": True}}
+        with mock.patch.object(FakeClient, "permit_content", return_value=lottery_content):
+            body = {"payload": {"2027-07-17": {
+                "166": {"quota_usage_by_member_daily": {"total": 60, "remaining": 60}, "is_walkup": False},
+                "406": {"quota_usage_by_member_daily": {"total": 100, "remaining": 4}, "is_walkup": False}}}}
+            send = self.run_with(body)
+        self.assertEqual(send.call_count, 2)
+
+    def test_catalog_cache_is_reused(self):
+        path = os.path.join(self.tmp, "cat.json")
+        fc = FakeClient([{}])
+        cli.build_catalog(cli.Tracker(fc), self.cfg, path)
+        calls = []
+        fc2 = FakeClient([{}])
+        fc2.permit_content = lambda pid: calls.append(pid) or CONTENT
+        cat = cli.build_catalog(cli.Tracker(fc2), self.cfg, path)
+        self.assertEqual(calls, [])
+        self.assertIn("445860", cat)
+
     def test_falls_back_to_generic_endpoint(self):
         body = {"payload": {"availability": {"1": {"division_id": "1", "date_availability": {
             "2027-07-17T00:00:00Z": {"total": 5, "remaining": 5}}}}}}

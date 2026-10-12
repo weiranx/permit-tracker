@@ -29,7 +29,9 @@ jobs:
       # The state DB is what makes alerts fire once per opening instead of every run.
       - uses: actions/cache/restore@v4
         with:
-          path: permit_state.sqlite3
+          path: |
+            permit_state.sqlite3
+            catalog_cache.json
           key: permit-state-${{ github.run_id }}
           restore-keys: permit-state-
 
@@ -64,5 +66,7 @@ jobs:
       - uses: actions/cache/save@v4
         if: always()
         with:
-          path: permit_state.sqlite3
+          path: |
+            permit_state.sqlite3
+            catalog_cache.json
           key: permit-state-${{ github.run_id }}

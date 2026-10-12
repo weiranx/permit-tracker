@@ -16,17 +16,39 @@ from .state import State
 
 # Permits known to use the permitinyo quota endpoint. Anything else is tried
 # there first and falls back to the generic endpoint on 404.
+# Permits served by the permitinyo quota endpoint. recreation.gov's own
+# /api/permitcontent/permitmapping lists these as "land_permit_ids".
 INYO_STYLE = {
     "445860",  # Mt. Whitney (233260 is the retired legacy ID)
     "233262",  # Inyo NF wilderness (trailhead quotas)
     "445858",  # Sierra NF wilderness
+    "445859",  # Yosemite wilderness
+    "445857",  # Sequoia & Kings Canyon wilderness
+    "445856",  # Humboldt-Toiyabe NF, Hoover Wilderness
+    "445862",  # Cleveland NF, PCT overnight
+    "445863",  # Enchantments daily lottery
+    "445861",  # Cedar Mesa backpacking
+    "445864",  # King Range Wilderness (Lost Coast)
+    "74984",   # Paria Canyon overnight
 }
-# Permits offered in the dashboard's "add watch" picker.
+
+# Permits offered in the dashboard's "add watch" picker, grouped by region.
+# Every entry was confirmed against the live API on 2026-10-12.
 CATALOG = {
-    "445860": "Mt. Whitney",
-    "233262": "Inyo NF wilderness",
-    "445858": "Sierra NF wilderness",
+    "445860": ("Mt. Whitney", "Sierra Nevada"),
+    "233262": ("Inyo NF wilderness", "Sierra Nevada"),
+    "445859": ("Yosemite wilderness", "Sierra Nevada"),
+    "445857": ("Sequoia & Kings Canyon wilderness", "Sierra Nevada"),
+    "445858": ("Sierra NF wilderness", "Sierra Nevada"),
+    "445856": ("Hoover Wilderness (Humboldt-Toiyabe NF)", "Sierra Nevada"),
+    "234652": ("Half Dome day hike", "Sierra Nevada"),
+    "445862": ("PCT overnight, Cleveland NF", "Southern California"),
+    "445864": ("Lost Coast (King Range Wilderness)", "Northern California"),
+    "445863": ("Enchantments daily lottery", "Pacific Northwest"),
+    "74984": ("Paria Canyon overnight", "Southwest"),
+    "445861": ("Cedar Mesa backpacking", "Southwest"),
 }
+CATALOG_MAX_AGE_S = 24 * 3600
 WEEKDAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
 
@@ -127,6 +149,12 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False,
         pname, divs = tracker.names(pid)
         entry["permit_name"] = pname
         lottery = has_lottery(tracker.content(pid))
+        # On lottery permits (Whitney, Yosemite) dates the lottery hasn't run
+        # for yet show every trailhead at its full quota. Once a date is
+        # released, at least one trailhead has bookings, so a date where all
+        # trailheads are untouched is treated as not released.
+        touched = {x.date for x in slots
+                   if not x.non_quota and x.total and x.remaining < x.total}
         name_bits = [n.lower() for n in w.get("division_names") or []]
         counts = {"open": 0, "full": 0, "not released": 0}
         for s in sorted(slots, key=lambda s: (s.date, s.division_id)):
@@ -139,9 +167,7 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False,
                 continue
             row = {"date": s.date, "division_id": s.division_id, "division": div_name,
                    "remaining": s.remaining, "total": s.total, "url": booking_url(pid, s.date)}
-            if s.not_yet_released or (lottery and s.total and s.remaining == s.total):
-                # Lottery permits (Whitney) show untouched full quotas for dates
-                # the lottery hasn't released yet. Real openings are partial.
+            if s.not_yet_released or (lottery and s.date not in touched):
                 counts["not released"] += 1
                 entry["rows"].append({**row, "state": "unreleased",
                                       "release_date": (s.release_date or "")[:10] or None})
@@ -169,20 +195,41 @@ def run_once(cfg: dict, tracker: Tracker, state: State, quiet: bool = False,
     return alerts
 
 
-def build_catalog(tracker: Tracker, cfg: dict) -> dict:
-    """Permit -> trailhead list for the dashboard's picker. Reuses permit
-    details already fetched this run; only uncached permits cost a request."""
+def build_catalog(tracker: Tracker, cfg: dict, cache_path: str | None = None) -> dict:
+    """Permit -> trailhead list for the dashboard's picker. Trailhead lists
+    rarely change, so they're cached for a day instead of costing a dozen
+    requests every run; permits already fetched this run are free."""
+    cached = {}
+    if cache_path:
+        try:
+            with open(cache_path) as f:
+                c = json.load(f)
+            if time.time() - c.get("built", 0) < CATALOG_MAX_AGE_S:
+                cached = c.get("permits", {})
+        except (OSError, ValueError):
+            pass
     ids = list(CATALOG) + [str(w["permit_id"]) for w in cfg["watches"] if str(w["permit_id"]) not in CATALOG]
     out = {}
     for pid in ids:
+        if pid in cached and pid not in tracker._content:
+            out[pid] = cached[pid]
+            continue
         name, divs = tracker.names(pid)
         if not divs:
+            if pid in cached:
+                out[pid] = cached[pid]
             continue
+        label, region = CATALOG.get(pid, (name, "Other"))
         out[pid] = {
-            "name": name if name != pid else CATALOG.get(pid, pid),
+            "name": label if pid in CATALOG else name,
+            "full_name": name,
+            "region": region,
             "divisions": sorted(({"id": k, **v} for k, v in divs.items()),
                                 key=lambda d: d["name"].lower()),
         }
+    if cache_path and out != cached:
+        with open(cache_path, "w") as f:
+            json.dump({"built": time.time(), "permits": out}, f)
     return out
 
 
@@ -213,7 +260,7 @@ def cmd_check(args, cfg):
             "new_openings": n,
             "watches": report,
             "recent_changes": state.recent(40),
-            "catalog": build_catalog(tracker, cfg),
+            "catalog": build_catalog(tracker, cfg, cfg.get("catalog_cache", "catalog_cache.json")),
         }
         with open(args.json, "w") as f:
             json.dump(snapshot, f, indent=1)
