@@ -4,123 +4,266 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Permit Tracker</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛰️</text></svg>">
+<meta name="theme-color" content="#1d3b33">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231d3b33'/><path d='M6 50 L24 22 L32 33 L40 18 L58 50 Z' fill='%23f2e8d5'/><path d='M36 24 L40 18 L44 25 L41 23 Z' fill='%23fff'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f5f1; --card: #ffffff; --text: #1d1f1c; --muted: #6b6f68; --line: #e3e1da;
-    --open: #2f7d4f; --open-bg: #dcefe2; --full: #b9b6ad; --full-bg: #eeece6;
-    --unrel-bg: repeating-linear-gradient(135deg, #f3f1ea 0 4px, #e6e3da 4px 8px);
-    --accent: #2f5d8a; --warn: #a3542a;
+    --bg: #f3efe6; --surface: #fffdf8; --surface-2: #f7f3ea; --text: #1d2621; --muted: #6a7068;
+    --line: #e4ddcf; --shadow: 0 1px 2px rgba(40,35,20,.06), 0 6px 20px -8px rgba(40,35,20,.18);
+    --pine: #2d6a4f; --pine-ink: #1f5a40; --pine-soft: #dcebdf; --pine-line: #b9d7c2;
+    --glow: #d9673b; --glow-soft: #fbe6dc; --sky: #2f5f8a;
+    --full: #c4beb1; --full-soft: #eeeae1;
+    --hatch: repeating-linear-gradient(135deg, #f1ede4 0 5px, #e5dfd2 5px 10px);
+    --hero-1: #f6c79b; --hero-2: #e9a07e; --hero-3: #8c6f8f; --ridge-1: #5b6f86; --ridge-2: #3c5368; --ridge-3: #22362f;
+    --hero-text: #fffaf2;
+    --radius: 16px;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #141614; --card: #1d201d; --text: #e9ebe6; --muted: #9aa096; --line: #2e322e;
-      --open: #6fd093; --open-bg: #1f3b29; --full: #4d524c; --full-bg: #262a26;
-      --unrel-bg: repeating-linear-gradient(135deg, #222622 0 4px, #2b302b 4px 8px);
-      --accent: #8db8e3; --warn: #e39a6f;
+      --bg: #0e1412; --surface: #151d1a; --surface-2: #1b2521; --text: #e8ede9; --muted: #98a39c;
+      --line: #26322d; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+      --pine: #6fcf97; --pine-ink: #8fe0b0; --pine-soft: #183427; --pine-line: #2a5a40;
+      --glow: #f0956b; --glow-soft: #3a2219; --sky: #8bb9e6;
+      --full: #4c5650; --full-soft: #1f2925;
+      --hatch: repeating-linear-gradient(135deg, #1b2420 0 5px, #232e29 5px 10px);
+      --hero-1: #2b3a5c; --hero-2: #4a3f66; --hero-3: #7a4d63; --ridge-1: #26344a; --ridge-2: #1a2636; --ridge-3: #0f1714;
     }
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body { margin: 0; background: var(--bg); color: var(--text);
-         font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
-  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin-bottom: 20px; }
-  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
-  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 28px 0 10px; }
-  .meta { color: var(--muted); font-size: 13px; }
-  .stale { color: var(--warn); }
-  a { color: var(--accent); text-decoration: none; }
+         font: 15px/1.5 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         -webkit-font-smoothing: antialiased; }
+  a { color: var(--sky); text-decoration: none; }
   a:hover { text-decoration: underline; }
-  .actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-  .btn { border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 6px 12px;
-         border-radius: 8px; font-size: 13px; }
-  .btn:hover { text-decoration: none; border-color: var(--muted); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-  .opennow { display: grid; gap: 8px; }
-  .opennow a { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px;
-               background: var(--open-bg); color: var(--text); }
-  .opennow b { color: var(--open); white-space: nowrap; }
-  .empty { color: var(--muted); }
-  .watch-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-bottom: 4px; }
-  .watch-head h3 { margin: 0; font-size: 17px; }
-  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 12px; }
-  .chip { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--full-bg); color: var(--muted); }
-  .chip.open { background: var(--open-bg); color: var(--open); font-weight: 600; }
-  .err { color: var(--warn); font-size: 13px; }
-  .trail { margin-top: 10px; }
-  .trail-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-  .strip { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 6px; }
-  .day { flex: 0 0 auto; width: 38px; border-radius: 6px; text-align: center; padding: 3px 0 4px;
-         font-size: 11px; line-height: 1.2; color: var(--muted); background: var(--full-bg); }
-  .day .n { display: block; font-size: 13px; font-weight: 600; color: var(--full); }
-  .day.open { background: var(--open-bg); color: var(--open); }
-  .day.open .n { color: var(--open); }
-  .day.unreleased { background: var(--unrel-bg); }
-  .day.unreleased .n { color: var(--muted); font-weight: 400; }
-  a.day:hover { text-decoration: none; outline: 2px solid var(--open); }
-  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
-  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px;
-                          vertical-align: -2px; margin-right: 5px; background: var(--full-bg); }
-  .legend .l-open::before { background: var(--open-bg); outline: 1px solid var(--open); }
-  .legend .l-unrel::before { background: var(--unrel-bg); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  td { padding: 6px 4px; border-top: 1px solid var(--line); }
-  td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .up { color: var(--open); font-weight: 600; }
-  footer { margin-top: 32px; font-size: 12px; color: var(--muted); }
   button { font: inherit; cursor: pointer; }
-  .btn.primary { background: var(--accent); color: var(--card); border-color: var(--accent); }
-  .btn.danger { color: var(--warn); }
-  .btn[disabled] { opacity: .5; cursor: default; }
-  .btn.sm { padding: 3px 9px; font-size: 12px; }
-  .row-actions { display: flex; gap: 6px; }
-  .banner { border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: 14px;
-            background: var(--open-bg); color: var(--text); display: none; }
+  code { font-size: .92em; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; overflow: hidden; color: var(--hero-text);
+          background: linear-gradient(180deg, var(--hero-3) 0%, var(--hero-2) 48%, var(--hero-1) 100%); }
+  .hero svg.ridges { position: absolute; inset: auto 0 0 0; width: 100%; height: 150px; display: block; }
+  .hero-inner { position: relative; max-width: 1040px; margin: 0 auto; padding: 28px 16px 92px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: .01em; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,.18);
+                display: grid; place-items: center; backdrop-filter: blur(4px); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hbtn { border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.14); color: var(--hero-text);
+          padding: 7px 13px; border-radius: 999px; font-size: 13px; font-weight: 500; backdrop-filter: blur(6px); }
+  .hbtn:hover { background: rgba(255,255,255,.24); text-decoration: none; }
+  .hbtn.solid { background: var(--hero-text); color: #1d3b33; border-color: transparent; font-weight: 600; }
+  .hbtn.solid:hover { background: #fff; }
+  .hero h1 { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: clamp(30px, 6vw, 46px);
+             line-height: 1.05; margin: 34px 0 8px; letter-spacing: -.01em; text-shadow: 0 1px 12px rgba(0,0,0,.12); }
+  .hero p.sub { margin: 0; opacity: .92; font-size: 15px; max-width: 560px; }
+  .status { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 5px 12px 5px 10px;
+            border-radius: 999px; background: rgba(0,0,0,.18); font-size: 13px; font-weight: 500; }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; background: #7ee2a8; box-shadow: 0 0 0 0 rgba(126,226,168,.7);
+                 animation: pulse 2.4s infinite; }
+  .status.stale .dot { background: #ffb37a; animation: none; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(126,226,168,.6); } 70% { box-shadow: 0 0 0 8px rgba(126,226,168,0); } 100% { box-shadow: 0 0 0 0 rgba(126,226,168,0); } }
+  @media (prefers-reduced-motion: reduce) { .status .dot { animation: none; } }
+
+  /* ---------- layout ---------- */
+  main { max-width: 1040px; margin: -64px auto 0; padding: 0 16px 56px; position: relative; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px;
+          box-shadow: var(--shadow); }
+  .stat .k { font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
+  .stat .v { font-family: Fraunces, Georgia, serif; font-size: 30px; font-weight: 700; line-height: 1.1; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .stat.hot .v { color: var(--pine); }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 30px 2px 12px; }
+  h2 { font-family: Fraunces, Georgia, serif; font-size: 21px; font-weight: 600; margin: 0; letter-spacing: -.005em; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px;
+          box-shadow: var(--shadow); margin-bottom: 14px; }
+  .empty { color: var(--muted); }
+  .meta { color: var(--muted); font-size: 13px; }
+
+  .banner { display: none; border-radius: 12px; padding: 11px 14px; margin-bottom: 16px; font-size: 14px;
+            background: var(--pine-soft); color: var(--text); border: 1px solid var(--pine-line); box-shadow: var(--shadow); }
   .banner.show { display: block; }
-  .banner.err { background: var(--full-bg); color: var(--warn); }
-  dialog { border: 1px solid var(--line); border-radius: 14px; padding: 0; width: min(560px, calc(100vw - 32px));
-           background: var(--card); color: var(--text); }
-  dialog::backdrop { background: rgba(0,0,0,.45); }
-  dialog form { padding: 20px; display: grid; gap: 14px; }
-  dialog h3 { margin: 0; font-size: 18px; }
-  label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
-  label.f small, .hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+  .banner.err { background: var(--glow-soft); border-color: var(--glow); }
+
+  /* ---------- open now ---------- */
+  .opennow { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .slot { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; color: var(--text);
+          background: var(--surface); border: 1px solid var(--pine-line); box-shadow: var(--shadow);
+          transition: transform .12s ease, box-shadow .12s ease; }
+  .slot:hover { text-decoration: none; transform: translateY(-1px); border-color: var(--pine); }
+  .datebox { flex: 0 0 auto; width: 52px; text-align: center; border-radius: 11px; background: var(--pine-soft); padding: 5px 0 6px; }
+  .datebox .m { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--pine-ink); }
+  .datebox .d { font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 700; line-height: 1; color: var(--pine-ink); }
+  .slot .what { flex: 1; min-width: 0; }
+  .slot .what b { display: block; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .slot .what span { font-size: 12.5px; color: var(--muted); }
+  .slot .left { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .slot .left strong { display: block; font-size: 18px; color: var(--pine); font-variant-numeric: tabular-nums; }
+  .calm { display: flex; align-items: center; gap: 14px; }
+  .calm svg { flex: 0 0 auto; }
+
+  /* ---------- watch cards ---------- */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 4px; background: var(--full-soft); display: inline-block; }
+  .legend .l-open i { background: var(--pine-soft); outline: 1.5px solid var(--pine); outline-offset: -1.5px; }
+  .legend .l-unrel i { background: var(--hatch); }
+  .watch-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+  .watch-head h3 { margin: 0 0 3px; font-size: 18px; font-weight: 650; letter-spacing: -.005em; }
+  .permit-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
+  .permit-tag a { color: var(--muted); }
+  .permit-tag a:hover { color: var(--sky); }
+  .row-actions { display: flex; gap: 6px; }
+  .ibtn { border: 1px solid var(--line); background: var(--surface-2); color: var(--text); padding: 5px 11px;
+          border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .ibtn:hover { border-color: var(--muted); }
+  .ibtn.danger { color: var(--glow); }
+  .facts { display: flex; gap: 6px 14px; flex-wrap: wrap; margin: 10px 0 12px; font-size: 13px; color: var(--muted); }
+  .facts span { display: inline-flex; align-items: center; gap: 5px; }
+  .facts svg { opacity: .75; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+  .chip { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--full-soft); color: var(--muted); font-weight: 500; }
+  .chip.open { background: var(--pine-soft); color: var(--pine-ink); font-weight: 600; }
+  .err { color: var(--glow); font-size: 13px; margin-top: 8px; }
+  .trail { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .trail-name { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .strip { display: flex; gap: 5px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: thin; }
+  .day { flex: 0 0 auto; width: 46px; border-radius: 11px; text-align: center; padding: 6px 0 7px;
+         font-size: 10.5px; line-height: 1.25; color: var(--muted); background: var(--full-soft); }
+  .day .wd { font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .day .n { display: block; font-size: 16px; font-weight: 700; color: var(--full); margin: 1px 0; font-variant-numeric: tabular-nums; }
+  .day.open { background: var(--pine-soft); color: var(--pine-ink); box-shadow: inset 0 0 0 1.5px var(--pine); }
+  .day.open .n { color: var(--pine); }
+  .day.unreleased { background: var(--hatch); }
+  .day.unreleased .n { color: var(--muted); font-weight: 500; }
+  a.day:hover { text-decoration: none; background: var(--pine); color: var(--surface); }
+  a.day:hover .n { color: var(--surface); }
+
+  /* ---------- changes ---------- */
+  .changes { list-style: none; margin: 0; padding: 0; }
+  .changes li { display: grid; grid-template-columns: 10px 1fr auto auto; align-items: center; gap: 12px; padding: 9px 2px; border-top: 1px solid var(--line); font-size: 13.5px; }
+  .changes li:first-child { border-top: 0; }
+  .changes .pip { width: 8px; height: 8px; border-radius: 50%; background: var(--full); }
+  .changes .up .pip { background: var(--pine); }
+  .changes .num { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .changes .up .num { color: var(--pine); }
+  .changes .when { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+  footer { margin-top: 36px; font-size: 12px; color: var(--muted); text-align: center; }
+
+  /* ---------- dialogs & forms ---------- */
+  dialog { border: 1px solid var(--line); border-radius: 20px; padding: 0; width: min(560px, calc(100vw - 24px));
+           background: var(--surface); color: var(--text); box-shadow: 0 30px 80px -20px rgba(0,0,0,.45); }
+  dialog::backdrop { background: rgba(15,22,19,.55); backdrop-filter: blur(3px); }
+  dialog form { padding: 22px; display: grid; gap: 14px; }
+  dialog h3 { margin: 0; font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600; }
+  label.f { display: grid; gap: 5px; font-size: 13px; font-weight: 600; }
+  label.f small, .hint { font-weight: 400; color: var(--muted); font-size: 12.5px; }
   input[type=text], input[type=password], input[type=number], input[type=date], select {
-    font: inherit; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px;
-    background: var(--bg); color: var(--text); width: 100%; }
+    font: inherit; padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--surface-2); color: var(--text); width: 100%; }
+  input:focus, select:focus { outline: 2px solid var(--pine); outline-offset: 1px; border-color: transparent; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .picker { max-height: 210px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; }
-  .picker label { display: flex; gap: 8px; align-items: baseline; padding: 3px 0; font-size: 14px; font-weight: 400; }
+  .picker { max-height: 220px; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 4px 10px; background: var(--surface-2); }
+  .picker label { display: flex; gap: 9px; align-items: baseline; padding: 4px 0; font-size: 14px; font-weight: 400; }
   .picker label small { color: var(--muted); }
-  .seg { display: flex; gap: 14px; font-size: 14px; }
-  .seg label, .wk label { display: flex; gap: 5px; align-items: center; font-weight: 400; }
-  .wk { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; }
+  input[type=checkbox], input[type=radio] { accent-color: var(--pine); }
+  .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px; width: max-content; }
+  .seg label { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label:has(input:checked) { background: var(--surface); box-shadow: var(--shadow); color: var(--pine-ink); }
+  .wk { display: flex; gap: 6px; flex-wrap: wrap; font-size: 13px; }
+  .wk label { display: flex; align-items: center; gap: 5px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; font-weight: 500; cursor: pointer; }
+  .wk label:has(input:checked) { background: var(--pine-soft); border-color: var(--pine-line); color: var(--pine-ink); }
+  .wk input { position: absolute; opacity: 0; pointer-events: none; }
   .chipset { display: flex; gap: 6px; flex-wrap: wrap; }
-  .chipset .chip button { border: 0; background: none; color: inherit; padding: 0 0 0 4px; }
-  .form-actions { display: flex; justify-content: flex-end; gap: 8px; }
-  .form-err { color: var(--warn); font-size: 13px; min-height: 1em; }
-  .tokstate { font-size: 12px; color: var(--muted); }
+  .chipset .chip button { border: 0; background: none; color: inherit; padding: 0 0 0 5px; }
+  .form-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+  .form-err { color: var(--glow); font-size: 13px; min-height: 1em; }
+  .btn { border: 1px solid var(--line); background: var(--surface-2); color: var(--text); padding: 8px 15px;
+         border-radius: 999px; font-size: 13.5px; font-weight: 500; }
+  .btn:hover { border-color: var(--muted); }
+  .btn.primary { background: var(--pine); color: #fff; border-color: var(--pine); font-weight: 600; }
+  :root:not([data-theme="light"]) .btn.primary { color: #0e1412; }
+  @media (prefers-color-scheme: light) { :root .btn.primary { color: #fff; } }
+  .btn.danger { color: var(--glow); }
+  .btn[disabled] { opacity: .55; cursor: default; }
+  .steps { padding-left: 20px; margin: 8px 0; }
+  .steps li { margin: 3px 0; }
+
+  @media (max-width: 640px) {
+    .hero-inner { padding: 20px 16px 84px; }
+    .hero h1 { margin-top: 26px; }
+    .stats { gap: 8px; }
+    .stat { padding: 11px 12px; }
+    .stat .v { font-size: 24px; }
+    .stat .k { font-size: 10.5px; }
+    .two { grid-template-columns: 1fr; }
+    .changes li { grid-template-columns: 10px 1fr auto; }
+    .changes .when { grid-column: 2 / -1; margin-top: -6px; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <h1>⛰️ Permit Tracker</h1>
-    <span class="meta" id="updated">Loading…</span>
-    <div class="actions">
-      <button class="btn primary" id="add">+ Add watch</button>
-      <button class="btn" id="tokbtn">Connect GitHub</button>
-      <a class="btn" id="runs" href="#">Run history</a>
+<header class="hero">
+  <svg class="ridges" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 92 L120 60 L210 82 L330 34 L420 70 L540 40 L640 76 L760 28 L860 66 L980 44 L1090 80 L1210 38 L1330 72 L1440 54 L1440 150 L0 150 Z" fill="var(--ridge-1)" opacity=".55"/>
+    <path d="M0 112 L90 94 L190 108 L300 72 L380 98 L500 80 L610 104 L720 66 L800 92 L930 74 L1040 102 L1150 70 L1260 98 L1360 84 L1440 96 L1440 150 L0 150 Z" fill="var(--ridge-2)" opacity=".8"/>
+    <path d="M0 150 L0 128 L140 116 L260 130 L400 108 L520 126 L660 112 L800 132 L940 114 L1080 128 L1220 110 L1340 124 L1440 118 L1440 150 Z" fill="var(--bg)"/>
+  </svg>
+  <div class="hero-inner">
+    <div class="topbar">
+      <div class="brand">
+        <span class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2 20 L9 8 L13 14 L16 9 L22 20 Z"/></svg></span>
+        Permit Tracker
+      </div>
+      <div class="actions">
+        <button class="hbtn solid" id="add">+ Add watch</button>
+        <button class="hbtn" id="tokbtn">Connect GitHub</button>
+        <a class="hbtn" id="runs" href="#">Run history</a>
+      </div>
     </div>
-  </header>
+    <h1>Find your way in.</h1>
+    <p class="sub">Wilderness permits on recreation.gov, checked every 10 minutes. Cancellations show up here first.</p>
+    <div class="status" id="statuspill"><span class="dot"></span><span id="updated">Loading…</span></div>
+  </div>
+</header>
+
+<main>
   <div class="banner" id="banner"></div>
+
+  <div class="stats">
+    <div class="stat hot"><div class="k">Open now</div><div class="v" id="s-open">–</div></div>
+    <div class="stat"><div class="k">Watches</div><div class="v" id="s-watch">–</div></div>
+    <div class="stat"><div class="k">Changes · 24h</div><div class="v" id="s-chg">–</div></div>
+  </div>
+
+  <div class="section-head"><h2>Open now</h2><span class="meta">Tap to book on recreation.gov</span></div>
+  <div class="opennow" id="opennow"><div class="card empty">Loading…</div></div>
+
+  <div class="section-head">
+    <h2>Your watches</h2>
+    <div class="legend"><span class="l-open"><i></i>enough spots</span><span><i></i>too few / full</span><span class="l-unrel"><i></i>not released</span></div>
+  </div>
+  <div id="watches"></div>
+
+  <div class="section-head"><h2>Recent changes</h2><span class="meta">Cancellations and new releases</span></div>
+  <div class="card" id="changes"><span class="empty">Loading…</span></div>
+
+  <footer>
+    Data from recreation.gov's public availability feed, checked by a GitHub Action.
+    This page only watches; you book on recreation.gov.
+  </footer>
 
   <dialog id="tokdlg">
     <form method="dialog" id="tokform">
-      <h3>Connect GitHub to edit watches</h3>
+      <h3>Connect GitHub</h3>
       <div class="hint">
         Saving a watch commits <code>config.json</code> to your repo, which needs a GitHub token.
-        <ol style="padding-left:18px;margin:8px 0">
+        <ol class="steps">
           <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">new fine-grained token</a>.</li>
           <li><b>Repository access:</b> Only select repositories → <code>weiranx/permit-tracker</code>.</li>
           <li><b>Permissions:</b> Contents → Read and write. Nothing else.</li>
@@ -144,7 +287,7 @@
       <h3 id="wtitle">Add watch</h3>
       <label class="f">Name <input type="text" id="wname" required placeholder="Whitney overnight"></label>
       <label class="f">Permit <select id="wpermit"></select></label>
-      <div class="f" style="display:grid;gap:4px">
+      <div style="display:grid;gap:6px">
         <span style="font-size:13px;font-weight:600">Trailheads <small class="hint" id="wcount"></small></span>
         <input type="text" id="wfilter" placeholder="Filter trailheads…">
         <div class="picker" id="wdivs"></div>
@@ -159,7 +302,7 @@
           <label class="f">Last entry date <input type="date" id="wend"></label>
         </div>
         <div class="wk" id="wwk"></div>
-        <div class="hint">Leave all days unticked to watch every day.</div>
+        <div class="hint">Leave all days unselected to watch every day.</div>
       </div>
       <div id="mdates" style="display:none;gap:8px">
         <div style="display:flex;gap:8px"><input type="date" id="wdate"><button class="btn" type="button" id="wdateadd">Add</button></div>
@@ -174,23 +317,6 @@
       </div>
     </form>
   </dialog>
-
-  <h2>Open now</h2>
-  <div class="card"><div class="opennow" id="opennow"><span class="empty">Loading…</span></div></div>
-
-  <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
-    <h2>Your watches</h2>
-    <div class="legend"><span class="l-open">enough spots</span><span>too few / full</span><span class="l-unrel">not released yet</span></div>
-  </div>
-  <div id="watches"></div>
-
-  <h2>Recent changes</h2>
-  <div class="card" id="changes"><span class="empty">Loading…</span></div>
-
-  <footer>
-    Data comes from recreation.gov's public availability feed, checked by a GitHub Action.
-    Book on recreation.gov; this page only watches.
-  </footer>
 </main>
 <script>
 const REPO = "weiranx/permit-tracker";
@@ -201,6 +327,20 @@ const el = (tag, attrs = {}, ...kids) => {
   for (const [k, v] of Object.entries(attrs)) k === "class" ? n.className = v : n.setAttribute(k, v);
   for (const k of kids) n.append(k);
   return n;
+};
+const svg = (paths, size = 14) => {
+  const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("width", size); s.setAttribute("height", size); s.setAttribute("viewBox", "0 0 24 24");
+  s.setAttribute("fill", "none"); s.setAttribute("stroke", "currentColor"); s.setAttribute("stroke-width", "2");
+  s.setAttribute("stroke-linecap", "round"); s.setAttribute("stroke-linejoin", "round");
+  s.innerHTML = paths; return s;
+};
+const ICON = {
+  cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+  people: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2c3 .3 5.5 2.7 5.5 5.8"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  repeat: '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+  ext: '<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
 };
 const fmtDay = d => new Date(d + "T12:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
 const ago = iso => {
@@ -214,12 +354,12 @@ let DATA = null;
 function render(data) {
   DATA = data;
   const up = document.getElementById("updated");
+  const pill = document.getElementById("statuspill");
   up.textContent = `Checked ${ago(data.generated_at)}`;
-  up.title = data.generated_at;
-  if (Date.now() - new Date(data.generated_at) > 3 * 3600e3) {
-    up.classList.add("stale");
-    up.textContent += " (the Action may be paused)";
-  }
+  pill.title = data.generated_at;
+  const stale = Date.now() - new Date(data.generated_at) > 3 * 3600e3;
+  pill.classList.toggle("stale", stale);
+  if (stale) up.textContent += " · the Action may be paused";
 
   // Open now
   const open = [];
@@ -229,12 +369,27 @@ function render(data) {
     if (r.state === "open") open.push({ w, r });
   }
   open.sort((a, b) => a.r.date.localeCompare(b.r.date));
+  const dayAgo = Date.now() - 864e5;
+  const changes = data.recent_changes || [];
+  document.getElementById("s-open").textContent = open.length;
+  document.getElementById("s-watch").textContent = data.watches.length;
+  document.getElementById("s-chg").textContent = changes.filter(c => new Date(c.ts) > dayAgo).length;
+
   const on = document.getElementById("opennow");
-  on.replaceChildren(...(open.length ? open.map(({ w, r }) =>
-    el("a", { href: r.url, target: "_blank", rel: "noopener" },
-      el("span", {}, `${fmtDay(r.date)} · ${r.division}`),
-      el("b", {}, `${r.remaining} left →`))) :
-    [el("span", { class: "empty" }, "Nothing open for your dates and party size right now.")]));
+  on.replaceChildren(...(open.length ? open.map(({ w, r }) => {
+    const d = new Date(r.date + "T12:00:00");
+    return el("a", { class: "slot", href: r.url, target: "_blank", rel: "noopener" },
+      el("div", { class: "datebox" },
+        el("div", { class: "m" }, d.toLocaleDateString(undefined, { month: "short" })),
+        el("div", { class: "d" }, String(d.getDate()))),
+      el("div", { class: "what" },
+        el("b", {}, r.division),
+        el("span", {}, `${d.toLocaleDateString(undefined, { weekday: "long" })} · ${w.name}`)),
+      el("div", { class: "left" }, el("strong", {}, String(r.remaining)), "left →"));
+  }) : [el("div", { class: "card calm", style: "grid-column:1/-1" },
+        svg('<path d="M2 20 L9 8 L13 14 L16 9 L22 20 Z"/>', 34),
+        el("div", {}, el("b", {}, "Nothing open right now."),
+          el("div", { class: "meta" }, "You'll get a push the moment a spot opens for your dates and party size.")))]));
 
   // Watches
   const ws = document.getElementById("watches");
@@ -243,31 +398,34 @@ function render(data) {
   } else ws.replaceChildren(...data.watches.map((w, idx) => {
     const counts = { open: 0, full: 0, unreleased: 0 };
     w.rows.forEach(r => counts[r.state]++);
+    const facts = el("div", { class: "facts" },
+      el("span", {}, svg(ICON.cal), `${fmtDay(w.start)} – ${fmtDay(w.end)}`),
+      el("span", {}, svg(ICON.people), `Party of ${w.min_party}`));
+    if (w.weekdays.length) facts.append(el("span", {}, svg(ICON.repeat), w.weekdays.map(d => d[0].toUpperCase() + d.slice(1, 3)).join(", ")));
     const card = el("div", { class: "card" },
       el("div", { class: "watch-head" },
-        el("h3", {}, w.name),
+        el("div", {},
+          el("h3", {}, w.name),
+          el("div", { class: "permit-tag" }, svg(ICON.pin, 13),
+            el("a", { href: `https://www.recreation.gov/permits/${w.permit_id}`, target: "_blank", rel: "noopener" },
+              w.permit_name || `Permit ${w.permit_id}`))),
         el("div", { class: "row-actions" },
-          el("a", { href: `https://www.recreation.gov/permits/${w.permit_id}`, target: "_blank", rel: "noopener", class: "meta", style: "margin-right:6px" },
-            w.permit_name || `Permit ${w.permit_id}`),
-          btn("Edit", "btn sm", () => openWatch(idx, w.name)),
-          btn("Delete", "btn sm danger", () => deleteWatch(idx, w.name)))),
-      el("div", { class: "meta" },
-        `${fmtDay(w.start)} – ${fmtDay(w.end)}` +
-        (w.weekdays.length ? ` · ${w.weekdays.join(", ")}` : "") + ` · party of ${w.min_party}`),
+          btn("Edit", "ibtn", () => openWatch(idx, w.name)),
+          btn("Delete", "ibtn danger", () => deleteWatch(idx, w.name)))),
+      facts,
       el("div", { class: "chips" },
         el("span", { class: "chip" + (counts.open ? " open" : "") }, `${counts.open} open`),
         el("span", { class: "chip" }, `${counts.full} full`),
         el("span", { class: "chip" }, `${counts.unreleased} not released`)));
     if (w.error) card.append(el("div", { class: "err" }, `Last check failed: ${w.error}`));
     if (!w.rows.length && !w.error)
-      card.append(el("div", { class: "empty" }, "recreation.gov hasn't published these dates yet."));
+      card.append(el("div", { class: "meta", style: "margin-top:10px" }, "recreation.gov hasn't published these dates yet."));
     const byTrail = {};
     w.rows.forEach(r => (byTrail[r.division] ||= []).push(r));
     for (const [trail, rows] of Object.entries(byTrail)) {
       const strip = el("div", { class: "strip" });
       for (const r of rows) {
         const d = new Date(r.date + "T12:00:00");
-        const label = `${d.toLocaleDateString(undefined, { month: "numeric", day: "numeric" })}`;
         const num = r.state === "unreleased" ? "–" : String(r.remaining);
         const title = `${fmtDay(r.date)}: ` + (r.state === "unreleased"
           ? "not released yet" + (r.release_date ? ` (opens ${r.release_date})` : "")
@@ -275,7 +433,9 @@ function render(data) {
         const cell = r.state === "open"
           ? el("a", { class: "day open", href: r.url, target: "_blank", rel: "noopener", title })
           : el("div", { class: `day ${r.state}`, title });
-        cell.append(d.toLocaleDateString(undefined, { weekday: "narrow" }), el("span", { class: "n" }, num), label);
+        cell.append(el("span", { class: "wd" }, d.toLocaleDateString(undefined, { weekday: "short" })),
+                    el("span", { class: "n" }, num),
+                    d.toLocaleDateString(undefined, { month: "numeric", day: "numeric" }));
         strip.append(cell);
       }
       card.append(el("div", { class: "trail" }, el("div", { class: "trail-name" }, trail), strip));
@@ -285,12 +445,13 @@ function render(data) {
 
   // Recent changes
   const ch = document.getElementById("changes");
-  const rows = (data.recent_changes || []).map(c =>
-    el("tr", {},
-      el("td", {}, `${fmtDay(c.date)} · ${names[`${c.permit_id}:${c.division_id}`] || c.division_id}`),
-      el("td", { class: "num" + (c.new > c.old ? " up" : "") }, `${c.old} → ${c.new}`),
-      el("td", { class: "num meta" }, ago(c.ts))));
-  ch.replaceChildren(rows.length ? el("table", {}, ...rows)
+  const items = changes.map(c =>
+    el("li", { class: c.new > c.old ? "up" : "" },
+      el("span", { class: "pip" }),
+      el("span", {}, `${fmtDay(c.date)} · ${names[`${c.permit_id}:${c.division_id}`] || c.division_id}`),
+      el("span", { class: "num" }, `${c.old} → ${c.new}`),
+      el("span", { class: "when" }, ago(c.ts))));
+  ch.replaceChildren(items.length ? el("ul", { class: "changes" }, ...items)
     : el("span", { class: "empty" }, "No changes seen yet. Cancellations show up here."));
 }
 
