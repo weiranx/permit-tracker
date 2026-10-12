@@ -8,5 +8,4 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tools/mine.py || true
-      - run: python3 tools/mine2.py | head -c 60000 || true
+      - run: python3 tools/mine3.py || true
