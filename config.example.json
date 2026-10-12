@@ -1,0 +1,36 @@
+{
+  "poll_minutes": 5,
+  "min_request_interval_s": 2,
+  "state_db": "permit_state.sqlite3",
+  "notify": {
+    "ntfy_topic": "CHANGE-ME-to-something-long-and-random",
+    "desktop": true,
+    "email_to": ""
+  },
+  "watches": [
+    {
+      "name": "Whitney overnight",
+      "permit_id": "233260",
+      "divisions": ["166"],
+      "start": "2027-06-01",
+      "end": "2027-09-30",
+      "weekdays": ["fri", "sat"],
+      "min_party": 2
+    },
+    {
+      "name": "Whitney day hike",
+      "permit_id": "233260",
+      "divisions": ["406"],
+      "dates": ["2027-07-17", "2027-07-24"],
+      "min_party": 1
+    },
+    {
+      "name": "Inyo trailheads (Bishop Pass / Piute)",
+      "permit_id": "233262",
+      "division_names": ["bishop pass", "piute pass"],
+      "start": "2027-07-01",
+      "end": "2027-08-31",
+      "min_party": 2
+    }
+  ]
+}
