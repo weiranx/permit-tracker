@@ -42,6 +42,17 @@
       "min_party": 1,
       "start": "2026-10-11",
       "end": "2026-10-18"
+    },
+    {
+      "name": "whitney oct",
+      "permit_id": "445860",
+      "divisions": [
+        "406",
+        "166"
+      ],
+      "min_party": 1,
+      "start": "2026-10-12",
+      "end": "2026-10-31"
     }
   ]
 }
