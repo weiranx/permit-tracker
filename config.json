@@ -9,20 +9,6 @@
   },
   "watches": [
     {
-      "name": "Whitney overnight",
-      "permit_id": "445860",
-      "divisions": [
-        "166"
-      ],
-      "start": "2027-06-01",
-      "end": "2027-09-30",
-      "weekdays": [
-        "fri",
-        "sat"
-      ],
-      "min_party": 2
-    },
-    {
       "name": "Inyo trailheads (Bishop Pass / Piute)",
       "permit_id": "233262",
       "division_names": [
