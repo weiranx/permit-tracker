@@ -1,0 +1,2119 @@
+{
+ "generated_at": "2026-10-24T15:50:08+00:00",
+ "poll_minutes": 5,
+ "new_openings": 1,
+ "watches": [
+  {
+   "name": "Inyo trailheads (Bishop Pass / Piute)",
+   "permit_id": "233262",
+   "min_party": 2,
+   "start": "2027-07-01",
+   "end": "2027-08-31",
+   "weekdays": [],
+   "rows": [],
+   "error": null,
+   "permit_name": "Inyo National Forest - Wilderness Permits"
+  },
+  {
+   "name": "whitney",
+   "permit_id": "445860",
+   "min_party": 1,
+   "start": "2026-10-24",
+   "end": "2026-10-18",
+   "weekdays": [],
+   "rows": [],
+   "error": "date range is in the past"
+  },
+  {
+   "name": "whitney oct",
+   "permit_id": "445860",
+   "min_party": 1,
+   "start": "2026-10-24",
+   "end": "2026-10-31",
+   "weekdays": [],
+   "rows": [
+    {
+     "date": "2026-10-25",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 2,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-25",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-26",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 9,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-26",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-26",
+     "division_id": "406",
+     "division": "Mt. Whitney Day Use (All Routes)",
+     "remaining": 7,
+     "total": 100,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-26",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-27",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 11,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-27",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-27",
+     "division_id": "406",
+     "division": "Mt. Whitney Day Use (All Routes)",
+     "remaining": 14,
+     "total": 100,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-27",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-28",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 3,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-28",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-28",
+     "division_id": "406",
+     "division": "Mt. Whitney Day Use (All Routes)",
+     "remaining": 6,
+     "total": 100,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-28",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-29",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 3,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-29",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-29",
+     "division_id": "406",
+     "division": "Mt. Whitney Day Use (All Routes)",
+     "remaining": 7,
+     "total": 100,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-29",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-30",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 11,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-30",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-30",
+     "division_id": "406",
+     "division": "Mt. Whitney Day Use (All Routes)",
+     "remaining": 3,
+     "total": 100,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-30",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-31",
+     "division_id": "166",
+     "division": "Mt. Whitney Trail (Overnight)",
+     "remaining": 1,
+     "total": 60,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-31",
+     "state": "open"
+    },
+    {
+     "date": "2026-10-31",
+     "division_id": "406",
+     "division": "Mt. Whitney Day Use (All Routes)",
+     "remaining": 2,
+     "total": 100,
+     "url": "https://www.recreation.gov/permits/445860/registration/detailed-availability?date=2026-10-31",
+     "state": "open"
+    }
+   ],
+   "error": null,
+   "permit_name": "Mt. Whitney"
+  }
+ ],
+ "recent_changes": [
+  {
+   "ts": "2026-10-24T15:50:08Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-27",
+   "old": 12,
+   "new": 11
+  },
+  {
+   "ts": "2026-10-24T15:50:08Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-26",
+   "old": 8,
+   "new": 7
+  },
+  {
+   "ts": "2026-10-24T11:58:39Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-27",
+   "old": 13,
+   "new": 14
+  },
+  {
+   "ts": "2026-10-24T07:03:09Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-30",
+   "old": 4,
+   "new": 11
+  },
+  {
+   "ts": "2026-10-24T07:03:09Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-26",
+   "old": 9,
+   "new": 8
+  },
+  {
+   "ts": "2026-10-24T07:03:09Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-26",
+   "old": 4,
+   "new": 9
+  },
+  {
+   "ts": "2026-10-24T01:52:52Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-31",
+   "old": 3,
+   "new": 1
+  },
+  {
+   "ts": "2026-10-24T01:52:52Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-30",
+   "old": 5,
+   "new": 4
+  },
+  {
+   "ts": "2026-10-24T01:52:52Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-26",
+   "old": 7,
+   "new": 9
+  },
+  {
+   "ts": "2026-10-24T01:52:52Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-25",
+   "old": 1,
+   "new": 2
+  },
+  {
+   "ts": "2026-10-23T23:24:12Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-31",
+   "old": 5,
+   "new": 3
+  },
+  {
+   "ts": "2026-10-23T23:24:12Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-29",
+   "old": 5,
+   "new": 7
+  },
+  {
+   "ts": "2026-10-23T23:24:12Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-26",
+   "old": 8,
+   "new": 7
+  },
+  {
+   "ts": "2026-10-23T23:24:12Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-24",
+   "old": 2,
+   "new": 4
+  },
+  {
+   "ts": "2026-10-23T23:24:12Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-23",
+   "old": 3,
+   "new": 2
+  },
+  {
+   "ts": "2026-10-23T20:26:51Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-31",
+   "old": 6,
+   "new": 5
+  },
+  {
+   "ts": "2026-10-23T20:26:51Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-30",
+   "old": 2,
+   "new": 3
+  },
+  {
+   "ts": "2026-10-23T20:26:51Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-29",
+   "old": 4,
+   "new": 5
+  },
+  {
+   "ts": "2026-10-23T20:26:51Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-29",
+   "old": 2,
+   "new": 3
+  },
+  {
+   "ts": "2026-10-23T17:06:22Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-31",
+   "old": 1,
+   "new": 6
+  },
+  {
+   "ts": "2026-10-23T17:06:22Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-30",
+   "old": 3,
+   "new": 2
+  },
+  {
+   "ts": "2026-10-23T17:06:22Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-30",
+   "old": 1,
+   "new": 5
+  },
+  {
+   "ts": "2026-10-23T17:06:22Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-29",
+   "old": 5,
+   "new": 4
+  },
+  {
+   "ts": "2026-10-23T17:06:22Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-23",
+   "old": 7,
+   "new": 16
+  },
+  {
+   "ts": "2026-10-23T12:07:55Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-26",
+   "old": 5,
+   "new": 4
+  },
+  {
+   "ts": "2026-10-23T06:36:54Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-28",
+   "old": 7,
+   "new": 6
+  },
+  {
+   "ts": "2026-10-23T06:36:54Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-27",
+   "old": 11,
+   "new": 13
+  },
+  {
+   "ts": "2026-10-23T06:36:53Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-23",
+   "old": 1,
+   "new": 3
+  },
+  {
+   "ts": "2026-10-23T01:48:17Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-25",
+   "old": 2,
+   "new": 1
+  },
+  {
+   "ts": "2026-10-23T01:48:17Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-23",
+   "old": 2,
+   "new": 1
+  },
+  {
+   "ts": "2026-10-22T23:20:49Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-29",
+   "old": 3,
+   "new": 5
+  },
+  {
+   "ts": "2026-10-22T23:20:49Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-27",
+   "old": 9,
+   "new": 11
+  },
+  {
+   "ts": "2026-10-22T23:20:49Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-27",
+   "old": 11,
+   "new": 12
+  },
+  {
+   "ts": "2026-10-22T23:20:49Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-26",
+   "old": 7,
+   "new": 5
+  },
+  {
+   "ts": "2026-10-22T23:20:49Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-25",
+   "old": 1,
+   "new": 2
+  },
+  {
+   "ts": "2026-10-22T23:20:49Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-24",
+   "old": 1,
+   "new": 2
+  },
+  {
+   "ts": "2026-10-22T20:05:29Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-27",
+   "old": 13,
+   "new": 11
+  },
+  {
+   "ts": "2026-10-22T20:05:29Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-23",
+   "old": 6,
+   "new": 7
+  },
+  {
+   "ts": "2026-10-22T20:05:29Z",
+   "permit_id": "445860",
+   "division_id": "406",
+   "date": "2026-10-22",
+   "old": 15,
+   "new": 34
+  },
+  {
+   "ts": "2026-10-22T20:05:29Z",
+   "permit_id": "445860",
+   "division_id": "166",
+   "date": "2026-10-22",
+   "old": 6,
+   "new": 5
+  }
+ ],
+ "catalog": {
+  "445860": {
+   "name": "Mt. Whitney",
+   "full_name": "Mt. Whitney",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "406",
+     "name": "Mt. Whitney Day Use (All Routes)",
+     "code": "JM34.5",
+     "district": "John Muir"
+    },
+    {
+     "id": "166",
+     "name": "Mt. Whitney Trail (Overnight)",
+     "code": "JM35",
+     "district": "John Muir"
+    }
+   ]
+  },
+  "233262": {
+   "name": "Inyo NF wilderness",
+   "full_name": "Inyo National Forest - Wilderness Permits",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "460",
+     "name": "Baker and Green Lakes",
+     "code": "JM22",
+     "district": "John Muir"
+    },
+    {
+     "id": "464",
+     "name": "Baxter Pass",
+     "code": "JM29",
+     "district": "John Muir"
+    },
+    {
+     "id": "437",
+     "name": "Beck Lake",
+     "code": "AA12",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "495",
+     "name": "Big Pine Creek North Fork",
+     "code": "JM23",
+     "district": "John Muir"
+    },
+    {
+     "id": "4952",
+     "name": "Big Pine Creek North Fork (Outfitter)",
+     "code": "JM23-O",
+     "district": ""
+    },
+    {
+     "id": "4951",
+     "name": "Big Pine Creek North Fork (Pack Outfit)",
+     "code": "JM23-PO",
+     "district": ""
+    },
+    {
+     "id": "461",
+     "name": "Big Pine Creek South Fork",
+     "code": "JM24",
+     "district": "John Muir"
+    },
+    {
+     "id": "462",
+     "name": "Birch Lake",
+     "code": "JM25",
+     "district": "John Muir"
+    },
+    {
+     "id": "459",
+     "name": "Bishop Pass -South Lake",
+     "code": "JM21",
+     "district": "John Muir"
+    },
+    {
+     "id": "473",
+     "name": "Blackrock (Non Quota)",
+     "code": "GT66",
+     "district": "Golden Trout"
+    },
+    {
+     "id": "517",
+     "name": "Bloody Canyon",
+     "code": "AA03",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "447",
+     "name": "Convict Creek",
+     "code": "JM04",
+     "district": "John Muir"
+    },
+    {
+     "id": "520",
+     "name": "Cottonwood Lakes",
+     "code": "JM39",
+     "district": "John Muir"
+    },
+    {
+     "id": "440",
+     "name": "Cottonwood Pass",
+     "code": "GT60",
+     "district": "Golden Trout"
+    },
+    {
+     "id": "443",
+     "name": "Deer Lakes",
+     "code": "JM00",
+     "district": "John Muir"
+    },
+    {
+     "id": "444",
+     "name": "Duck Pass",
+     "code": "JM01",
+     "district": "John Muir"
+    },
+    {
+     "id": "438",
+     "name": "Fern Lake",
+     "code": "AA13",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "474",
+     "name": "Fish Creek",
+     "code": "AA14",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "454",
+     "name": "Gable Lakes",
+     "code": "JM12",
+     "district": "John Muir"
+    },
+    {
+     "id": "467",
+     "name": "George Creek",
+     "code": "JM33",
+     "district": "John Muir"
+    },
+    {
+     "id": "484",
+     "name": "George Lake ",
+     "code": "JM18",
+     "district": "John Muir"
+    },
+    {
+     "id": "511",
+     "name": "Gibbs Lake",
+     "code": "AA02",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "424",
+     "name": "Glacier Canyon",
+     "code": "AA01",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "442",
+     "name": "Golden Trout Lakes",
+     "code": "JM30",
+     "district": "John Muir"
+    },
+    {
+     "id": "480",
+     "name": "Haiwee Pass (Non Quota)",
+     "code": "SS64",
+     "district": "Golden Trout"
+    },
+    {
+     "id": "485",
+     "name": "High Trail",
+     "code": "AA09",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "449",
+     "name": "Hilton Lakes",
+     "code": "JM06",
+     "district": "John Muir"
+    },
+    {
+     "id": "455",
+     "name": "Horton Lakes",
+     "code": "JM13",
+     "district": "John Muir"
+    },
+    {
+     "id": "452",
+     "name": "Italy Pass",
+     "code": "JM10",
+     "district": "John Muir"
+    },
+    {
+     "id": "486",
+     "name": "John Muir Trail North of Devils Postpile",
+     "code": "AA10",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "476",
+     "name": "John Muir Trail South of Devils Postpile",
+     "code": "AA15",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "465",
+     "name": "Kearsarge Pass",
+     "code": "JM31",
+     "district": "John Muir"
+    },
+    {
+     "id": "471",
+     "name": "Kennedy Meadows (Non Quota)",
+     "code": "SS65",
+     "district": "Golden Trout"
+    },
+    {
+     "id": "488",
+     "name": "Lakes Canyon (Non Quota)",
+     "code": "HH12",
+     "district": "Hoover / Inyo"
+    },
+    {
+     "id": "497",
+     "name": "Lamarck Lakes",
+     "code": "JM16",
+     "district": "John Muir"
+    },
+    {
+     "id": "446",
+     "name": "Laurel Lakes",
+     "code": "JM03",
+     "district": "John Muir"
+    },
+    {
+     "id": "451",
+     "name": "Little Lakes Valley",
+     "code": "JM09",
+     "district": "John Muir"
+    },
+    {
+     "id": "441",
+     "name": "Lundy Canyon (Non Quota)",
+     "code": "HH01",
+     "district": "Hoover / Inyo"
+    },
+    {
+     "id": "448",
+     "name": "McGee Pass",
+     "code": "JM05",
+     "district": "John Muir"
+    },
+    {
+     "id": "468",
+     "name": "Meysan Lake",
+     "code": "JM37",
+     "district": "John Muir"
+    },
+    {
+     "id": "436",
+     "name": "Minaret Lake",
+     "code": "AA11",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "494",
+     "name": "Mono Pass",
+     "code": "JM08",
+     "district": "John Muir"
+    },
+    {
+     "id": "516",
+     "name": "Mt. Whitney (Trail Crest Exit)",
+     "code": "JM35",
+     "district": "John Muir"
+    },
+    {
+     "id": "512",
+     "name": "North Fork of Lone Pine Creek",
+     "code": "JM34",
+     "district": "John Muir"
+    },
+    {
+     "id": "518",
+     "name": "Olancha Pass (Non Quota)",
+     "code": "SS63",
+     "district": "Golden Trout"
+    },
+    {
+     "id": "425",
+     "name": "Parker Lake",
+     "code": "AA04",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "481",
+     "name": "Pine Creek",
+     "code": "JM11",
+     "district": "John Muir"
+    },
+    {
+     "id": "456",
+     "name": "Piute Pass",
+     "code": "JM15",
+     "district": "John Muir"
+    },
+    {
+     "id": "439",
+     "name": "Red Cones",
+     "code": "AA16",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "463",
+     "name": "Red Lake",
+     "code": "JM26",
+     "district": "John Muir"
+    },
+    {
+     "id": "435",
+     "name": "River Trail",
+     "code": "AA08",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "430",
+     "name": "Rush Creek",
+     "code": "AA05",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "482",
+     "name": "Sabrina Lake",
+     "code": "JM17",
+     "district": "John Muir"
+    },
+    {
+     "id": "506",
+     "name": "Saddlebag Lake (Non Quota)",
+     "code": "HH14",
+     "district": "Hoover / Inyo"
+    },
+    {
+     "id": "478",
+     "name": "Sawmill Pass",
+     "code": "JM28",
+     "district": "John Muir"
+    },
+    {
+     "id": "487",
+     "name": "Shadow Creek",
+     "code": "AA07",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "466",
+     "name": "Shepherd Pass",
+     "code": "JM32",
+     "district": "John Muir"
+    },
+    {
+     "id": "477",
+     "name": "Taboose Pass",
+     "code": "JM27",
+     "district": "John Muir"
+    },
+    {
+     "id": "450",
+     "name": "Tamarack Lakes",
+     "code": "JM07",
+     "district": "John Muir"
+    },
+    {
+     "id": "475",
+     "name": "Trail Pass (Non Quota)",
+     "code": "GT62",
+     "district": "Golden Trout"
+    },
+    {
+     "id": "458",
+     "name": "Treasure Lakes",
+     "code": "JM20",
+     "district": "John Muir"
+    },
+    {
+     "id": "519",
+     "name": "Tuttle Creek",
+     "code": "JM38",
+     "district": "John Muir"
+    },
+    {
+     "id": "457",
+     "name": "Tyee Lakes",
+     "code": "JM19",
+     "district": "John Muir"
+    },
+    {
+     "id": "493",
+     "name": "Upper Buttermilk",
+     "code": "JM14",
+     "district": "John Muir"
+    },
+    {
+     "id": "445",
+     "name": "Valentine Lake",
+     "code": "JM02",
+     "district": "John Muir"
+    },
+    {
+     "id": "498",
+     "name": "Warren Fork (Non Quota)",
+     "code": "HH13",
+     "district": "Hoover / Inyo"
+    },
+    {
+     "id": "434",
+     "name": "Yost / Fern Lakes",
+     "code": "AA06-OH",
+     "district": "Owens River Headwaters"
+    }
+   ]
+  },
+  "445859": {
+   "name": "Yosemite wilderness",
+   "full_name": "Yosemite National Park Wilderness Permits",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "44585901",
+     "name": "Alder Creek",
+     "code": "621",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585902",
+     "name": "Aspen Valley",
+     "code": "751",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585957",
+     "name": "Badger Pass (Winter Only)",
+     "code": "581",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585903",
+     "name": "Base Line Camp Road",
+     "code": "921",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585904",
+     "name": "Beehive Meadows",
+     "code": "952",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585905",
+     "name": "Bridalveil Creek",
+     "code": "652",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585906",
+     "name": "Budd Creek (cross-country only)",
+     "code": "872",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585907",
+     "name": "Cathedral Lakes",
+     "code": "871",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585908",
+     "name": "Chilnualna Falls",
+     "code": "611",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585909",
+     "name": "Cottonwood Creek",
+     "code": "922",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585958",
+     "name": "Crane Flat (Winter Only)",
+     "code": "591",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585910",
+     "name": "Deer Camp",
+     "code": "631",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585959",
+     "name": "Dewey Meadow (#18) (Winter Only)",
+     "code": "585",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585960",
+     "name": "Dewey Ridge (#14) (Winter Only)",
+     "code": "584",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585911",
+     "name": "Gaylor Creek/Lake (cross-country only)",
+     "code": "891",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585912",
+     "name": "Glacier Point->Illilouette",
+     "code": "692",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585913",
+     "name": "Glacier Point->Little Yosemite Valley",
+     "code": "693",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585914",
+     "name": "Glen Aulin",
+     "code": "885",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585915",
+     "name": "Glen Aulin->Cold Canyon/Waterwheel (pass through)",
+     "code": "886",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585916",
+     "name": "Happy Isles->Illilouette (No Donohue Pass)",
+     "code": "701",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585917",
+     "name": "Happy Isles->Little Yosemite Valley (No Donohue Pass)",
+     "code": "702",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585918",
+     "name": "Happy Isles->Past LYV (Donohue Pass Eligible)",
+     "code": "703",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585961",
+     "name": "Horizon Ridge (#15) (Winter Only)",
+     "code": "583",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585967",
+     "name": "HSC Admin (Glen Aulin)",
+     "code": "",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585968",
+     "name": "HSC Admin (May Lake)",
+     "code": "",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585969",
+     "name": "HSC Admin (Sunrise)",
+     "code": "",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585919",
+     "name": "Luken->Lukens Lake",
+     "code": "782",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585920",
+     "name": "Lukens Lake->Yosemite Creek",
+     "code": "781",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585921",
+     "name": "Lyell (No Donohue Pass)",
+     "code": "883",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585922",
+     "name": "Lyell Canyon (Donohue Pass Eligible)",
+     "code": "884",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585962",
+     "name": "Mariposa Grove (Winter Only)",
+     "code": "431",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585923",
+     "name": "Mather Ranger Station",
+     "code": "931",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585924",
+     "name": "May Lake",
+     "code": "821",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585925",
+     "name": "May Lake->Snow Creek",
+     "code": "831",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585926",
+     "name": "McGurk Meadow",
+     "code": "653",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585963",
+     "name": "Merced Crest (#16) (Winter Only)",
+     "code": "582",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585964",
+     "name": "Merced Grove (Winter Only)",
+     "code": "592",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585927",
+     "name": "Miguel Meadow",
+     "code": "953",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585928",
+     "name": "Mirror Lake->Snow Creek",
+     "code": "711",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585929",
+     "name": "Mono Meadow",
+     "code": "671",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585930",
+     "name": "Mono/Parker Pass",
+     "code": "901",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585931",
+     "name": "Murphy Creek",
+     "code": "861",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585932",
+     "name": "Nelson Lake (cross-country only)",
+     "code": "881",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585933",
+     "name": "Old Big Oak Flat Road",
+     "code": "421",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585934",
+     "name": "Ostrander (Lost Bear Meadow)",
+     "code": "661",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585935",
+     "name": "Pohono Trail (Glacier Point)",
+     "code": "681",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585936",
+     "name": "Pohono Trail (Taft Point)",
+     "code": "691",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585937",
+     "name": "Pohono Trail (Wawona Tunnel/Bridalveil Parking)",
+     "code": "641",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585938",
+     "name": "Poopenaut Valley",
+     "code": "942",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585939",
+     "name": "Porcupine Creek",
+     "code": "811",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585940",
+     "name": "Rafferty Creek->Vogelsang",
+     "code": "882",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585941",
+     "name": "Rancheria Falls",
+     "code": "951",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585942",
+     "name": "Rockslides (cross-country only)",
+     "code": "411",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585943",
+     "name": "Smith Peak",
+     "code": "941",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585965",
+     "name": "Snow Creek Cabin (Winter Only)",
+     "code": "712",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585944",
+     "name": "South Fork of Tuolumne River",
+     "code": "741",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585945",
+     "name": "Sunrise (No Donohue Pass)",
+     "code": "851",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585946",
+     "name": "Tamarack Creek",
+     "code": "731",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585947",
+     "name": "Ten Lakes",
+     "code": "801",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585966",
+     "name": "Tioga Pass (Winter Only)",
+     "code": "913",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585948",
+     "name": "Westfall Meadow",
+     "code": "651",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585949",
+     "name": "White Wolf Campground",
+     "code": "771",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585950",
+     "name": "White Wolf->Aspen Valley",
+     "code": "761",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585951",
+     "name": "White Wolf->Pate Valley",
+     "code": "763",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585952",
+     "name": "White Wolf->Smith Meadow",
+     "code": "762",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585953",
+     "name": "Yosemite Creek",
+     "code": "791",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585954",
+     "name": "Yosemite Falls",
+     "code": "721",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585955",
+     "name": "Young Lakes via Dog Lake",
+     "code": "887",
+     "district": "Yosemite"
+    },
+    {
+     "id": "44585956",
+     "name": "Young Lakes via Glen Aulin Trail",
+     "code": "888",
+     "district": "Yosemite"
+    }
+   ]
+  },
+  "445857": {
+   "name": "Sequoia & Kings Canyon wilderness",
+   "full_name": "Sequoia and Kings Canyon National Parks Wilderness Permits",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "44585710",
+     "name": "Alta",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585718",
+     "name": "Atwell-Hockett",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585707",
+     "name": "Belle Canyon",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585704",
+     "name": "Bubbs Creek",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585726",
+     "name": "Colony Mill East",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585727",
+     "name": "Colony Mill West",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585702",
+     "name": "Copper Creek",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585728",
+     "name": "Don Cecil East",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585729",
+     "name": "Don Cecil West",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585721",
+     "name": "Eagle Lake",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585723",
+     "name": "Farewell Gap",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585724",
+     "name": "Franklin",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585714",
+     "name": "Garfield Grove",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585711",
+     "name": "High Sierra Trail",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585708",
+     "name": "JO Pass",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585713",
+     "name": "Ladybug",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585709",
+     "name": "Lakes Trail",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585725",
+     "name": "Lakes Trail Pass Through",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585701",
+     "name": "Lewis Creek",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585712",
+     "name": "Middle Fork Kaweah",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585720",
+     "name": "Mosquito Lakes",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585730",
+     "name": "North Fork Kaweah",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585731",
+     "name": "Oriole Lake",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585715",
+     "name": "Paradise Ridge",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585705",
+     "name": "Redwood Canyon",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585717",
+     "name": "Sawtooth Pass",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585706",
+     "name": "Sugarloaf",
+     "code": "",
+     "district": "Kings"
+    },
+    {
+     "id": "44585719",
+     "name": "Tar Gap",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585716",
+     "name": "Timber Gap",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585732",
+     "name": "Twin Lakes",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585722",
+     "name": "White Chief",
+     "code": "",
+     "district": "Sequoia"
+    },
+    {
+     "id": "44585703",
+     "name": "Woods Creek",
+     "code": "",
+     "district": "Kings"
+    }
+   ]
+  },
+  "445858": {
+   "name": "Sierra NF wilderness",
+   "full_name": "Sierra National Forest Wilderness Permit",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "44585819",
+     "name": "Badger -- This trailhead is not for entry into the Kaiser Wilderness.",
+     "code": "D1",
+     "district": "Dinkey Lakes"
+    },
+    {
+     "id": "44585833",
+     "name": "Bear Diversion",
+     "code": "J59",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585834",
+     "name": "Bear Ridge",
+     "code": "J60",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585842",
+     "name": "Billy Creek",
+     "code": "K5",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585812",
+     "name": "Cassidy/Miller",
+     "code": "A54",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585818",
+     "name": "Chiquito/Quartz",
+     "code": "A67",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585821",
+     "name": "Cliff Lake",
+     "code": "D3",
+     "district": "Dinkey Lakes"
+    },
+    {
+     "id": "44585843",
+     "name": "Coarsegrass Meadow",
+     "code": "K6",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585829",
+     "name": "Corbett",
+     "code": "J55",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585824",
+     "name": "Coyote - Access to this trailhead is via an OHV trail that is rated \"Most Difficult\".",
+     "code": "D6",
+     "district": "Dinkey Lakes"
+    },
+    {
+     "id": "44585807",
+     "name": "Crater- This trailhead accesses Crater Lake in the Ansel Adams wilderness, not the Crater Lake near Florence Lake",
+     "code": "A36",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585826",
+     "name": "Crown/Rancheria",
+     "code": "J52",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585841",
+     "name": "Deer Creek",
+     "code": "K4",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585836",
+     "name": "Devils/Graveyard",
+     "code": "J62",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585852",
+     "name": "Devils/Graveyard (Outfitter)",
+     "code": "J62",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585803",
+     "name": "Doris/Tule",
+     "code": "A32",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585830",
+     "name": "Dutch/Crater",
+     "code": "J56",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585816",
+     "name": "Fernandez",
+     "code": "A61",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585846",
+     "name": "Fernandez (Outfitter)",
+     "code": "A61",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585847",
+     "name": "Fernandez (Pack Outfit)",
+     "code": "A61",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585831",
+     "name": "Florence",
+     "code": "J57",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585853",
+     "name": "Florence (Outfitter)",
+     "code": "J57",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585809",
+     "name": "Hells Half Acre",
+     "code": "A51",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585820",
+     "name": "Helms Meadow",
+     "code": "D2",
+     "district": "Dinkey Lakes"
+    },
+    {
+     "id": "44585844",
+     "name": "Hidden",
+     "code": "K7",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585832",
+     "name": "Hooper",
+     "code": "J58",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585814",
+     "name": "Isberg   There will be bridge construction in the area near Hemlock Crossing from 7/6 - 8/15 2026. Hemlock Crossing will be closed to camping during this time.",
+     "code": "A58",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585848",
+     "name": "Isberg (Outfitter)",
+     "code": "A58",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585849",
+     "name": "Isberg (Pack Outfit)",
+     "code": "A58",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585808",
+     "name": "Logan Meadow",
+     "code": "A50",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585813",
+     "name": "Mammoth",
+     "code": "A56",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585837",
+     "name": "Margaret Lakes",
+     "code": "J63",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585828",
+     "name": "Maxson (Courtright)",
+     "code": "J54",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585854",
+     "name": "Maxson (Courtright) (Outfitter)",
+     "code": "J54",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585855",
+     "name": "Maxson (Courtright) (Pack Outfit)",
+     "code": "J54",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585835",
+     "name": "Mono Creek",
+     "code": "J61",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585804",
+     "name": "Mono Hot Springs- Please note, this trailhead does not access the upper Mono Creek drainage or the JMT/PCT corridor",
+     "code": "A33",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585802",
+     "name": "Mono Meadow- Please note, this trailhead does not access the upper Mono Creek drainage or the JMT/PCT",
+     "code": "A31",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585822",
+     "name": "Nelson",
+     "code": "D4",
+     "district": "Dinkey Lakes"
+    },
+    {
+     "id": "44585850",
+     "name": "Norris lake/Jackass (Outfitter)",
+     "code": "A64",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585817",
+     "name": "Norris Lake/Jackass Lakes",
+     "code": "A64",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585801",
+     "name": "Onion Springs OHV/Margaret Lakes",
+     "code": "A30",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585811",
+     "name": "Piyau Dome",
+     "code": "A53",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585805",
+     "name": "Portal Forebay",
+     "code": "A34",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585840",
+     "name": "Potter Cut-off",
+     "code": "K3",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585839",
+     "name": "Potter Pass",
+     "code": "K2",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585845",
+     "name": "Pryor",
+     "code": "K8",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585806",
+     "name": "Rattlesnake -- This trailhead is for entry into the Ansel Adams Wilderness.",
+     "code": "A35",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585838",
+     "name": "Sample Meadow",
+     "code": "K1",
+     "district": "Kaiser Wilderness"
+    },
+    {
+     "id": "44585810",
+     "name": "South Fork",
+     "code": "A52",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585825",
+     "name": "Statham/Spanish",
+     "code": "J51",
+     "district": "John Muir"
+    },
+    {
+     "id": "44585815",
+     "name": "Walton",
+     "code": "A60",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585851",
+     "name": "Walton (Outfitter)",
+     "code": "A60",
+     "district": "Ansel Adams"
+    },
+    {
+     "id": "44585823",
+     "name": "Willow Meadow/Dinkey Lake",
+     "code": "D5",
+     "district": "Dinkey Lakes"
+    },
+    {
+     "id": "44585827",
+     "name": "Woodchuck",
+     "code": "J53",
+     "district": "John Muir"
+    }
+   ]
+  },
+  "445856": {
+   "name": "Hoover Wilderness (Humboldt-Toiyabe NF)",
+   "full_name": "Humboldt-Toiyabe National Forest \u2013 Hoover Wilderness Permits",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "8560",
+     "name": "Buckeye Creek",
+     "code": "HH068",
+     "district": "D2"
+    },
+    {
+     "id": "8568",
+     "name": "Burt Canyon",
+     "code": "HH084",
+     "district": "D2"
+    },
+    {
+     "id": "8571",
+     "name": "Cattle Creek",
+     "code": "HH087",
+     "district": "D2"
+    },
+    {
+     "id": "8572",
+     "name": "Emma Lake",
+     "code": "HH088",
+     "district": "D2"
+    },
+    {
+     "id": "8564",
+     "name": "Green Creek",
+     "code": "HH082",
+     "district": "D2"
+    },
+    {
+     "id": "8563",
+     "name": "Horse Creek",
+     "code": "HH076",
+     "district": "D2"
+    },
+    {
+     "id": "8569",
+     "name": "Leavitt Lake",
+     "code": "HH085",
+     "district": "D2"
+    },
+    {
+     "id": "8566",
+     "name": "Leavitt Meadows",
+     "code": "HH046",
+     "district": "D2"
+    },
+    {
+     "id": "8562",
+     "name": "Little Slide Canyon",
+     "code": "HH077",
+     "district": "D2"
+    },
+    {
+     "id": "8567",
+     "name": "Molybdenite Creek",
+     "code": "HH083",
+     "district": "D2"
+    },
+    {
+     "id": "8561",
+     "name": "Robinson Creek",
+     "code": "HH077",
+     "district": "D2"
+    },
+    {
+     "id": "8570",
+     "name": "Tamarack Lake",
+     "code": "HH086",
+     "district": "D2"
+    },
+    {
+     "id": "8565",
+     "name": "Virginia Lakes",
+     "code": "HH081",
+     "district": "D2"
+    }
+   ]
+  },
+  "234652": {
+   "name": "Half Dome day hike",
+   "full_name": "Half Dome Permits",
+   "region": "Sierra Nevada",
+   "divisions": [
+    {
+     "id": "34",
+     "name": "Educational",
+     "code": "",
+     "district": ""
+    },
+    {
+     "id": "31",
+     "name": "Half Dome Cables (Daily)",
+     "code": "",
+     "district": ""
+    },
+    {
+     "id": "32",
+     "name": "Half Dome Cables (Seasonal)",
+     "code": "",
+     "district": ""
+    },
+    {
+     "id": "33",
+     "name": "Scenic",
+     "code": "",
+     "district": ""
+    }
+   ]
+  },
+  "445862": {
+   "name": "PCT overnight, Cleveland NF",
+   "full_name": "Cleveland National Forest PCT Overnight Permits",
+   "region": "Southern California",
+   "divisions": [
+    {
+     "id": "44586201",
+     "name": "Cleveland PCT Overnight",
+     "code": "",
+     "district": ""
+    }
+   ]
+  },
+  "445864": {
+   "name": "Lost Coast (King Range Wilderness)",
+   "full_name": "King Range Wilderness Permits (Lost Coast)",
+   "region": "Northern California",
+   "divisions": [
+    {
+     "id": "445864001",
+     "name": "King Range",
+     "code": "",
+     "district": ""
+    }
+   ]
+  },
+  "445863": {
+   "name": "Enchantments daily lottery",
+   "full_name": "Enchantment Permit Area Daily Lottery",
+   "region": "Pacific Northwest",
+   "divisions": [
+    {
+     "id": "445863002",
+     "name": "Colchuck Zone",
+     "code": "",
+     "district": "Enchantments"
+    },
+    {
+     "id": "445863001",
+     "name": "Core Enchantment Zone",
+     "code": "",
+     "district": "Enchantments"
+    },
+    {
+     "id": "445863003",
+     "name": "Eightmile/Caroline Zone",
+     "code": "",
+     "district": "Enchantments"
+    },
+    {
+     "id": "445863004",
+     "name": "Snow Zone",
+     "code": "",
+     "district": "Enchantments"
+    },
+    {
+     "id": "445863005",
+     "name": "Stuart Zone",
+     "code": "",
+     "district": "Enchantments"
+    }
+   ]
+  },
+  "74984": {
+   "name": "Paria Canyon overnight",
+   "full_name": "Paria Canyon Overnight Permits",
+   "region": "Southwest",
+   "divisions": [
+    {
+     "id": "9840",
+     "name": "Paria Canyon Overnight",
+     "code": "",
+     "district": ""
+    }
+   ]
+  },
+  "445861": {
+   "name": "Cedar Mesa backpacking",
+   "full_name": "Cedar Mesa Backpacking Permits",
+   "region": "Southwest",
+   "divisions": [
+    {
+     "id": "445861008",
+     "name": "Bullet Canyon",
+     "code": "",
+     "district": "Grand Gulch"
+    },
+    {
+     "id": "445861005",
+     "name": "Collins Canyon",
+     "code": "",
+     "district": "Grand Gulch"
+    },
+    {
+     "id": "445861009",
+     "name": "Fish and Owl Canyons\u00a0",
+     "code": "",
+     "district": "Cedar Mesa"
+    },
+    {
+     "id": "445861004",
+     "name": "Government Trail",
+     "code": "",
+     "district": "Grand Gulch"
+    },
+    {
+     "id": "445861007",
+     "name": "Kane Gulch",
+     "code": "",
+     "district": "Grand Gulch"
+    },
+    {
+     "id": "445861002",
+     "name": "Lime Creek\u00a0",
+     "code": "",
+     "district": "Cedar Mesa"
+    },
+    {
+     "id": "445861003",
+     "name": "Mule Canyon\u00a0",
+     "code": "",
+     "district": "Cedar Mesa"
+    },
+    {
+     "id": "445861001",
+     "name": "Road Canyon\u00a0",
+     "code": "",
+     "district": "Cedar Mesa"
+    },
+    {
+     "id": "445861006",
+     "name": "Slickhorn Canyon",
+     "code": "",
+     "district": "Cedar Mesa"
+    }
+   ]
+  }
+ }
+}
